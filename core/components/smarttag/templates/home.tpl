@@ -1,0 +1,1 @@
+<div id="smarttag-panel-home-div"></div>

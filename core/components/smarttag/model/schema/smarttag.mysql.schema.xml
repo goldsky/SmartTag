@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="smarttag" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" version="1.1">
+    <object class="smarttagTagresources" table="tagresources" extends="xPDOObject">
+        <field key="tag_id" dbtype="int" precision="10" phptype="integer" null="false" index="pk" />
+        <field key="tmplvar_id" dbtype="int" precision="10" phptype="integer" null="false" index="pk" />
+        <field key="resource_id" dbtype="int" precision="10" phptype="integer" null="false" index="pk" />
+
+        <index alias="PRIMARY" name="PRIMARY" primary="true" unique="true" type="BTREE" >
+            <column key="tag_id" length="" collation="A" null="false" />
+            <column key="tmplvar_id" length="" collation="A" null="false" />
+            <column key="resource_id" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Tags" class="smarttagTags" local="tag_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="TemplateVar" class="smarttagTemplateVar" local="tmplvar_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Resource" class="smarttagResource" local="resource_id" foreign="id" cardinality="one" owner="foreign" />
+    </object>
+    <object class="smarttagTags" table="tags" extends="xPDOSimpleObject">
+        <field key="tag" dbtype="varchar" precision="255" phptype="string" null="false" />
+        
+        <composite alias="Tagresources" class="smarttagTagresources" local="id" foreign="tag_id" cardinality="many" owner="local" />
+    </object>
+    <object class="smarttagTemplateVar" extends="modTemplateVar">
+        <composite alias="Tagresources" class="smarttagTagresources" local="id" foreign="tmplvar_id" cardinality="many" owner="local" />
+    </object>
+    <object class="smarttagResource" extends="modResource">
+        <composite alias="Tagresources" class="smarttagTagresources" local="id" foreign="resource_id" cardinality="many" owner="local" />
+    </object>
+</model>
