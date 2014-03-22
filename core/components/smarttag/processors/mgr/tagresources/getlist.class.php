@@ -1,12 +1,12 @@
 <?php
 
-class TagsGetListProcessor extends modObjectGetListProcessor {
+class TagResourcesGetListProcessor extends modObjectGetListProcessor {
 
-    public $classKey = 'smarttagTags';
+    public $classKey = 'smarttagTagresources';
     public $languageTopics = array('smarttag:default');
-    public $defaultSortField = 'tag';
+    public $defaultSortField = 'resource_id';
     public $defaultSortDirection = 'ASC';
-    public $objectType = 'smarttag.TagsGetList';
+    public $objectType = 'smarttag.TagResourcesGetList';
 
     /**
      * Can be used to adjust the query prior to the COUNT statement
@@ -16,26 +16,17 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
      */
     public function prepareQueryBeforeCount(xPDOQuery $c) {
         $props = $this->getProperties();
-        if (isset($props['valuesqry']) &&
-                empty($props['valuesqry']) &&
-                isset($props['query']) &&
-                !empty($props['query'])
-        ) {
+        if (!empty($props['tagId'])) {
             $c->where(array(
-                'tag:LIKE' => "%{$props['query']}%"
+                'tag_id' => $props['tagId'],
             ));
         }
-        // for tagcloud
-        if ($props['sort'] === 'count') {
-            $c->select(array(
-                'smarttagTags.id',
-                'smarttagTags.tag',
-                'count' => "(SELECT COUNT(*) FROM {$this->modx->getTableName('smarttagTagresources')} AS smarttagTagresources " .
-                "WHERE smarttagTagresources.tag_id = smarttagTags.id)"
-            ));
-            $c->sortby('count', 'desc');
-            $c->sortby('tag', 'asc');
-        }
+        $c->innerJoin('smarttagResource', 'smarttagResource', 'smarttagResource.id = smarttagTagresources.resource_id');
+        $c->select(array(
+            'smarttagTagresources.*',
+            'smarttagResource.pagetitle'
+        ));
+        
         return $c;
     }
 
@@ -57,4 +48,4 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
 
 }
 
-return 'TagsGetListProcessor';
+return 'TagResourcesGetListProcessor';

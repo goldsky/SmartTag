@@ -18,7 +18,7 @@ if (!class_exists('SmartTagInputRender')) {
         }
 
         public function getTemplate() {
-            return $this->modx->getOption('core_path') . 'components/smarttag/tv/input/tpl/smarttag.tpl';
+            return $this->modx->getOption('core_path') . 'components/smarttag/elements/tv/input/tpl/smarttag.tpl';
         }
 
         /**

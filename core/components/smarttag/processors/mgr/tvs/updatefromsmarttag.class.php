@@ -6,6 +6,11 @@ class TVsUpdateFromSmartTagProcessor extends modObjectUpdateProcessor {
     public $languageTopics = array('smarttag:cmp');
     public $objectType = 'smarttag.TVsUpdateFromSmartTag';
 
+    public function initialize() {
+        $this->setProperty('display', 'default');
+        return parent::initialize();
+    }
+    
     /**
      * Override in your derivative class to do functionality after save() is run
      * @return boolean

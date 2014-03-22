@@ -81,7 +81,7 @@ SmartTag.panel.Home = function(config) {
                 layout: 'fit',
                 items: [
                     {
-                        xtype: 'smarttag-panel-tagcloud',
+                        xtype: 'smarttag-page-tagcloud'
                     }
                 ]
             }, {
@@ -146,7 +146,7 @@ Ext.extend(SmartTag.panel.Home, MODx.Panel, {
         });
 
         contentPanel.add({
-            xtype: 'smarttag-panel-' + page
+            xtype: 'smarttag-page-' + page
         });
 
         var container = Ext.getCmp('modx-content');
