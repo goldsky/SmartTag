@@ -1,0 +1,1 @@
+<li>[[+smarttag.tag]] ([[+smarttag.count]])</li>

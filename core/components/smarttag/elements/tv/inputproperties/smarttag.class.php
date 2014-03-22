@@ -20,7 +20,17 @@
  * Suite 330, Boston, MA 02111-1307 USA
  *
  * @package smarttag
- * @subpackage i18n
+ * @subpackage tv
  */
-$_lang['smarttag'] = 'SmartTag';
-$_lang['smarttag_desc'] = 'Tags Database';
+if (!class_exists('SmartTagInputRenderProperties')) {
+
+    class SmartTagInputRenderProperties extends modTemplateVarInputRender {
+
+        public function getTemplate() {
+            return $this->modx->getOption('core_path') . 'components/smarttag/elements/tv/inputproperties/tpl/smarttag.tpl';
+        }
+
+    }
+
+}
+return 'SmartTagInputRenderProperties';

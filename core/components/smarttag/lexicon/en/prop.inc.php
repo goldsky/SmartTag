@@ -22,5 +22,9 @@
  * @package smarttag
  * @subpackage i18n
  */
-$_lang['smarttag'] = 'SmartTag';
-$_lang['smarttag_desc'] = 'Tags Database';
+$_lang['smarttag.includeEmptyTags'] = 'Do you want to include tags without resources?';
+$_lang['smarttag.limit'] = 'Maximum number of list. 0 = no limit.';
+$_lang['smarttag.sort'] = 'Comma delimited multiple sorting. Format: field direction,field direction. Mind the space in between.';
+$_lang['smarttag.tplWrapper'] = 'Name of chunk for wrapper template of the output. @BINDING enabled (eg: @FILE:[path/to/file.tpl])';
+$_lang['smarttag.tplItem'] = 'Name of chunk for item template of the output. @BINDING enabled (eg: @FILE:[path/to/file.tpl])';
+$_lang['smarttag.phsPrefix'] = 'Prefix for the placeholders';

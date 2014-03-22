@@ -95,8 +95,8 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
                             });
                             _this.doLayout();
                             cmp.doLayout();
-                            _this.hideMask();
                         }
+                        _this.hideMask();
                     }
                 }
             }

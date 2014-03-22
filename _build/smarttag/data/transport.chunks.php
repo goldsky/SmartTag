@@ -19,8 +19,29 @@
  * SmartTag; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
  * Suite 330, Boston, MA 02111-1307 USA
  *
+ * SmartTag build script
+ *
  * @package smarttag
- * @subpackage i18n
+ * @subpackage build
  */
-$_lang['smarttag'] = 'SmartTag';
-$_lang['smarttag_desc'] = 'Tags Database';
+$chunks = array();
+
+$chunks[0] = $modx->newObject('modChunk');
+$chunks[0]->fromArray(array(
+    'id' => 0,
+    'name' => 'smarttagtags.item',
+    'description' => 'Chunk for item template of tag list',
+    'snippet' => file_get_contents($sources['source_core'] . '/elements/chunks/smarttagtags.item.chunk.tpl'),
+    'properties' => '',
+        ), '', true, true);
+
+$chunks[1] = $modx->newObject('modChunk');
+$chunks[1]->fromArray(array(
+    'id' => 1,
+    'name' => 'smarttagtags.wrapper',
+    'description' => 'Chunk for wrapper template of tag list',
+    'snippet' => file_get_contents($sources['source_core'] . '/elements/chunks/smarttagtags.wrapper.chunk.tpl'),
+    'properties' => '',
+        ), '', true, true);
+
+return $chunks;
