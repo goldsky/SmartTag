@@ -46,3 +46,7 @@ $_lang['smarttag.remove_confirm'] = 'Are you sure you want to delete this? This 
 $_lang['smarttag.remove_selected_confirm'] = 'Are you sure you want to delete this tag from selected resources? This is irreversible.';
 $_lang['smarttag.tag_err_ns'] = 'Tag\'s name is empty.';
 $_lang['smarttag.tag_err_ns_resource_id'] = 'Resource\'s ID is empty.';
+$_lang['smarttag.limit'] = 'Limit';
+$_lang['smarttag.go!'] = 'Go!';
+$_lang['smarttag.sync'] = 'Syncronize existing tags';
+$_lang['smarttag.load_more!'] = 'Load More';

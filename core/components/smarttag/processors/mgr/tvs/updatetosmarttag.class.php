@@ -22,6 +22,19 @@
  * @package smarttag
  * @subpackage processor
  */
+
+// Apache's timeout: 600 secs
+if (function_exists('ini_get') && !ini_get('safe_mode')) {
+    if (function_exists('set_time_limit')) {
+        set_time_limit(600);
+    }
+    if (function_exists('ini_set')) {
+        if (ini_get('max_execution_time') !== 600) {
+            ini_set('max_execution_time', 600);
+        }
+    }
+}
+
 class TVsUpdateToSmartTagProcessor extends modObjectUpdateProcessor {
 
     public $classKey = 'modTemplateVar';
@@ -64,16 +77,17 @@ class TVsUpdateToSmartTagProcessor extends modObjectUpdateProcessor {
                 $tag->set('tag', $value);
                 $tag->save();
             }
-            $smarttagTagresources = $this->modx->newObject('smarttagTagresources');
             $params = array(
                 'tag_id' => $tag->getPrimaryKey(),
                 'tmplvar_id' => $TVRes['tmplvarid'],
                 'resource_id' => $TVRes['contentid'],
             );
-            $smarttagTagresources->fromArray($params, NULL, TRUE, TRUE);
-            $smarttagTagresources = array($smarttagTagresources);
-            $tag->addMany($smarttagTagresources);
-            $tag->save();
+            $smarttagTagresources = $this->modx->getObject('smarttagTagresources', $params);
+            if (!$smarttagTagresources) {
+                $smarttagTagresources = $this->modx->newObject('smarttagTagresources');
+                $smarttagTagresources->fromArray($params, NULL, TRUE, TRUE);
+                $smarttagTagresources->save();
+            }
         }
     }
 }

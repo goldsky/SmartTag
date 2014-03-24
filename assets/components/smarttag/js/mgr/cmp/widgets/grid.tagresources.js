@@ -9,7 +9,7 @@ SmartTag.grid.TagResources = function(config) {
             action: 'mgr/tagresources/getlist',
             tagId: config.record.tagId
         },
-        fields: ['id', 'tag_id', 'resource_id', 'pagetitle'],
+        fields: ['id', 'tag_id', 'resource_id', 'pagetitle', 'action_edit'],
         paging: true,
         remoteSort: true,
         autoExpandColumn: 'pagetitle',
@@ -39,7 +39,11 @@ SmartTag.grid.TagResources = function(config) {
             }, {
                 header: _('pagetitle'),
                 dataIndex: 'pagetitle',
-                sortable: true
+                sortable: true,
+                renderer: {
+                    fn: this._renderPageTitle,
+                    scope: this
+                }
             }
         ],
         tbar: [
@@ -63,6 +67,7 @@ SmartTag.grid.TagResources = function(config) {
     });
 
     SmartTag.grid.TagResources.superclass.constructor.call(this, config);
+    this._makeTemplates();
 };
 Ext.extend(SmartTag.grid.TagResources, MODx.grid.Grid, {
     deleteTag: function(tagId) {
@@ -141,6 +146,14 @@ Ext.extend(SmartTag.grid.TagResources, MODx.grid.Grid, {
                 }
             }
         });
+    },
+    _makeTemplates: function() {
+        this.tplPageTitle = new Ext.XTemplate('<tpl for="."><a href="{action_edit}" title="' + _('edit') + ' {pagetitle}" class="smarttag-pagetitle">{pagetitle}</a></tpl>', {
+            compiled: true
+        });
+    },
+    _renderPageTitle: function(v, md, rec) {
+        return this.tplPageTitle.apply(rec.data);
     }
 });
 Ext.reg('smarttag-grid-tagresources', SmartTag.grid.TagResources);

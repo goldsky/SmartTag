@@ -4,7 +4,9 @@ SmartTag.combo.TVs = function(config) {
     Ext.apply(config, {
         url: SmartTag.config.connectorUrl
         , baseParams: {
-            action: 'mgr/tvs/getlist'
+            action: 'mgr/tvs/getlist',
+            addBlank: config.addBlank || false,
+            onlySmartTag: config.onlySmartTag || false
         }
         , pageSize: 10
         , lazyRender: true

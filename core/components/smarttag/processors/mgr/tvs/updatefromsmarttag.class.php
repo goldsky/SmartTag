@@ -22,6 +22,19 @@
  * @package smarttag
  * @subpackage processor
  */
+
+// Apache's timeout: 600 secs
+if (function_exists('ini_get') && !ini_get('safe_mode')) {
+    if (function_exists('set_time_limit')) {
+        set_time_limit(600);
+    }
+    if (function_exists('ini_set')) {
+        if (ini_get('max_execution_time') !== 600) {
+            ini_set('max_execution_time', 600);
+        }
+    }
+}
+
 class TVsUpdateFromSmartTagProcessor extends modObjectUpdateProcessor {
 
     public $classKey = 'modTemplateVar';
@@ -47,7 +60,7 @@ class TVsUpdateFromSmartTagProcessor extends modObjectUpdateProcessor {
                 $value = str_replace('||', ',', $value);
                 $v->set('value', $value);
                 $v->save();
-                $this->_removeTags($v->toArray());
+                // $this->_removeTags($v->toArray());
             }
         }
         return true;

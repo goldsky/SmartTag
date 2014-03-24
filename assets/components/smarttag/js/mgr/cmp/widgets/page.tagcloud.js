@@ -6,8 +6,9 @@ SmartTag.page.TagCloud = function(config) {
         baseCls: 'modx-formpanel',
         bodyStyle: 'min-height: 500px; overflow-y: scroll;',
         preventRender: true,
-        defaults: {
-        },
+        start: 0,
+        loadMore: false,
+        countBtns: 0,
         items: [
             {
                 xtype: 'modx-tabs',
@@ -27,7 +28,68 @@ SmartTag.page.TagCloud = function(config) {
                             {
                                 html: '<p>' + _('smarttag.tagcloud_desc') + '</p>',
                                 bodyCssClass: 'panel-desc',
-                                border: false
+                                border: false,
+                                tbar: [
+                                    {
+                                        html: _('search') + ' : ',
+                                        border: false,
+                                        xtype: 'panel',
+                                        padding: 10
+                                    }, {
+                                        xtype: 'textfield',
+                                        name: 'smarttag-tagcloud-search',
+                                        id: 'smarttag-tagcloud-search',
+                                        fieldLabel: _('search'),
+                                        width: 100
+                                    }, {
+                                        html: _('smarttag.limit') + ' : ',
+                                        border: false,
+                                        xtype: 'panel',
+                                        padding: 10
+                                    }, {
+                                        xtype: 'numberfield',
+                                        fieldLabel: _('smarttag.limit'),
+                                        name: 'smarttag-tagcloud-limit',
+                                        id: 'smarttag-tagcloud-limit',
+                                        width: 100,
+                                        value: 50
+                                    }, {
+                                        html: _('name') + ' : ',
+                                        border: false,
+                                        xtype: 'panel',
+                                        padding: 10
+                                    }, {
+                                        name: 'smarttag-tagcloud-tvid',
+                                        id: 'smarttag-tagcloud-tvid',
+                                        fieldLabel: _('name'),
+                                        xtype: 'smarttag-combo-tvs',
+                                        onlySmartTag: true,
+                                        addBlank: true,
+                                        listeners: {
+                                            select: function(comp, record, index) {
+                                                if (comp.getValue() == "" || comp.getValue() == "&nbsp;")
+                                                    comp.setValue(null);
+                                            }
+                                        }
+                                    }, {
+                                        xtype: 'button',
+                                        text: _('smarttag.go!'),
+                                        handler: function() {
+                                            this.start = 0;
+                                            this.loadMore = false;
+                                            this.countBtns = 0;
+                                            Ext.getCmp('smarttag-tagcloud-total-count').update('0/0');
+                                            this.loadCloud();
+                                        },
+                                        scope: this
+                                    }, '->', {
+                                        xtype: 'panel',
+                                        id: 'smarttag-tagcloud-total-count',
+                                        html: '0/0',
+                                        border: false,
+                                        bodyStyle: 'font-weight: bold; font-size: large;'
+                                    }
+                                ]
                             }, {
                                 id: 'smarttag-panel-tagcloud',
                                 border: false,
@@ -47,6 +109,30 @@ SmartTag.page.TagCloud = function(config) {
                                         scope: this
                                     }
                                 }
+                            }, {
+                                layout: 'hbox',
+                                bodyCssClass: 'panel-desc',
+                                border: false,
+                                layoutConfig: {
+                                    pack: 'center',
+                                    align: 'middle'
+                                },
+                                items: [
+                                    {
+                                        xtype: 'button',
+                                        id: 'smarttag-panel-tagcloud-loadmore-button',
+                                        text: 'Load More',
+                                        disabled: true,
+                                        handler: function() {
+                                            var limit = Ext.getCmp('smarttag-tagcloud-limit').getValue();
+                                            limit = limit ? limit - 0 : 50;
+                                            this.start = this.start + limit;
+                                            this.loadMore = true;
+                                            this.loadCloud();
+                                        },
+                                        scope: this
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -68,15 +154,30 @@ SmartTag.page.TagCloud = function(config) {
 };
 Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
     loadCloud: function() {
+        var limit = Ext.getCmp('smarttag-tagcloud-limit').getValue();
+        limit = limit ? limit - 0 : 50;
+        var search = Ext.getCmp('smarttag-tagcloud-search').getValue();
+        search = search || '';
+        var tvId = Ext.getCmp('smarttag-tagcloud-tvid').getValue();
+
         var _this = this;
         var cmp = Ext.getCmp('smarttag-panel-tagcloud');
-        cmp.removeAll();
+        if (!this.loadMore) {
+            cmp.removeAll();
+        }
         _this.loadMask();
+
         MODx.Ajax.request({
             url: SmartTag.config.connectorUrl,
             params: {
                 action: 'mgr/tags/getlist',
-                sort: 'count'
+                sort: 'count',
+                dir: 'desc',
+                limit: limit,
+                start: this.start,
+                query: search,
+                valuesqry: '',
+                tvId: tvId
             },
             listeners: {
                 'success': {
@@ -92,7 +193,14 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
                                         _this.openTagTab(item);
                                     }
                                 });
+                                _this.countBtns++;
                             });
+                            if (_this.countBtns >= response.total) {
+                                Ext.getCmp('smarttag-panel-tagcloud-loadmore-button').setDisabled(true);
+                            } else {
+                                Ext.getCmp('smarttag-panel-tagcloud-loadmore-button').setDisabled(false);
+                            }
+                            Ext.getCmp('smarttag-tagcloud-total-count').update(_this.countBtns + '/' + response.total);
                             _this.doLayout();
                             cmp.doLayout();
                         }
@@ -103,7 +211,7 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
         });
     },
     loadMask: function() {
-        if (!this.loadCloudMask){
+        if (!this.loadCloudMask) {
             var domHandler = Ext.getCmp('smarttag-panel-tagcloud').body.dom;
             this.loadCloudMask = new Ext.LoadMask(domHandler, {
                 msg: _('smarttag.please_wait')

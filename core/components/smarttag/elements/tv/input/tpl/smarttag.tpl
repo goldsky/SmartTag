@@ -17,7 +17,7 @@ Ext.onReady(function() {
         ,triggerAction: 'all'
         ,mode: 'remote'
         ,store: new Ext.data.JsonStore({
-            //autoLoad: true,
+            autoLoad: true,
             root: 'results',
             dir: 'ASC',
             fields: ['id', 'tag'],
@@ -33,6 +33,9 @@ Ext.onReady(function() {
         ,minChars: 1
         ,allowAddNewData: true
         ,value: "{$tv->get('value')|escape}"
+        //,valueDelimiter: "||"
+        //,queryValuesDelimiter: "||"
+        ,originalValue: "{$tv->get('value')|escape}"
         ,extraItemCls: 'x-tag'
         ,width: 400
         ,displayField: "tag"

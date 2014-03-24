@@ -57,16 +57,15 @@ class TagsUpdateProcessor extends modObjectUpdateProcessor {
                 if (!$tvValue) {
                     continue;
                 }
-                $allValues = array();
+                
+                // getting values from parsed 'smarttag' output
+                $tvValue = str_replace(',', '||', $tvValue);
                 // getting values from 'default' output
                 $tvValues = @explode('||', $tvValue);
-                // getting values from parsed 'smarttag' output
-                foreach ($tvValues as $oriValue) {
-                    $allValues = array_merge($allValues, @explode(',', $oriValue));
-                }
-                $key = array_search($this->object->get('tag'), $allValues);
-                $allValues[$key] = $this->getProperty('tag');
-                $tvValue = @implode('||', $allValues);
+                $tvValues = array_unique($tvValues);
+                $key = array_search($this->object->get('tag'), $tvValues);
+                $tvValues[$key] = $this->getProperty('tag');
+                $tvValue = @implode('||', $tvValues);
                 $resource->setTVValue($smarttagTagresource->get('tmplvar_id'), $tvValue);
             }
         }

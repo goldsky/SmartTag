@@ -31,6 +31,18 @@ class TagResourcesGetListProcessor extends modObjectGetListProcessor {
     public $objectType = 'smarttag.TagResourcesGetList';
 
     /**
+     * {@inheritDoc}
+     * @return boolean
+     */
+    public function initialize() {
+        $this->editAction = $this->modx->getObject('modAction', array(
+            'namespace' => 'core',
+            'controller' => 'resource/update',
+        ));
+        return parent::initialize();
+    }
+
+    /**
      * Can be used to adjust the query prior to the COUNT statement
      *
      * @param xPDOQuery $c
@@ -48,8 +60,19 @@ class TagResourcesGetListProcessor extends modObjectGetListProcessor {
             'smarttagTagresources.*',
             'smarttagResource.pagetitle'
         ));
-        
+
         return $c;
+    }
+
+    /**
+     * Prepare the row for iteration
+     * @param xPDOObject $object
+     * @return array
+     */
+    public function prepareRow(xPDOObject $object) {
+        $objectArray = parent::prepareRow($object);
+        $objectArray['action_edit'] = '?a=' . $this->editAction->get('id') . '&id=' . $objectArray['resource_id'];
+        return $objectArray;
     }
 
     /**
@@ -64,7 +87,9 @@ class TagResourcesGetListProcessor extends modObjectGetListProcessor {
      * @return string The JSON output.
      */
     public function outputArray(array $array, $count = false) {
-        $count = count($array);
+        if ($count === false) {
+            $count = count($array);
+        }
         return '{"success":true,"total":' . $count . ',"results":' . $this->modx->toJSON($array) . '}';
     }
 

@@ -15,9 +15,10 @@ SmartTag.page.Converter = function(config) {
                 border: false,
                 bodyStyle: 'margin-bottom: 15px;'
             }, {
-                xtype: 'buttongroup',
-                id: 'smarttag-converter-buttongroup',
-                title: _('action'),
+                layout: 'hbox',
+                id: 'smarttag-converter-hbox',
+                bodyStyle: 'background-color: transparent;',
+                border: false,
                 items: [
                     {
                         xtype: 'smarttag-combo-tvs',
@@ -48,6 +49,12 @@ SmartTag.page.Converter = function(config) {
                         text: _('smarttag.to_tag'),
                         disabled: true,
                         handler: this.convertToTag
+                    }, {
+                        xtype: 'button',
+                        id: 'smarttag-convert-button-sync',
+                        text: _('smarttag.sync'),
+                        disabled: true,
+                        handler: this.syncTags
                     }
                 ]
             }
@@ -71,15 +78,17 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
             Ext.getCmp('smarttag-convert-button-to-smarttag').disable();
             Ext.getCmp('smarttag-convert-button-to-autotag').enable();
             Ext.getCmp('smarttag-convert-button-to-tag').enable();
+            Ext.getCmp('smarttag-convert-button-sync').enable();
         } else {
             Ext.getCmp('smarttag-convert-button-to-smarttag').enable();
             Ext.getCmp('smarttag-convert-button-to-autotag').disable();
             Ext.getCmp('smarttag-convert-button-to-tag').disable();
+            Ext.getCmp('smarttag-convert-button-sync').disable();
         }
     },
     loadMask: function() {
         if (!this.loadConverterMask){
-            var domHandler = Ext.getCmp('smarttag-converter-buttongroup').body.dom;
+            var domHandler = Ext.getCmp('smarttag-converter-hbox').body.dom;
             this.loadConverterMask = new Ext.LoadMask(domHandler, {
                 msg: _('smarttag.please_wait')
             });
@@ -149,6 +158,26 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
                     fn: function() {
                         Ext.getCmp('smarttag-combo-tvs').getStore().reload();
                         _this.toggleButton('');
+                        _this.hideMask();
+                    }
+                }
+            }
+        });
+    },
+    syncTags: function(btn, e) {
+        var comboBox = Ext.getCmp('smarttag-combo-tvs');
+        var _this = Ext.getCmp('smarttag-page-converter');
+        _this.loadMask();
+        MODx.Ajax.request({
+            url: SmartTag.config.connectorUrl,
+            params: {
+                action: 'mgr/tvs/sync',
+                tvId: comboBox.getValue()
+            },
+            listeners: {
+                'success': {
+                    fn: function() {
+                        Ext.getCmp('smarttag-combo-tvs').getStore().reload();
                         _this.hideMask();
                     }
                 }

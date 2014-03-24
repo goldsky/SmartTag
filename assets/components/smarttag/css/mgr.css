@@ -2,8 +2,14 @@
     display: none;
 }
 
-// overrides modx-theme
-.smarttag-tag-btn {
+/* overrides modx-theme */
+/* declare this first!!! */
+#smarttag-panel-tagcloud {}
+#smarttag-panel-tagcloud .smarttag-tag-btn {
     float: left;
     margin: 5px 5px 0 0;
+}
+
+#smarttag-converter-hbox .x-btn {
+    position: absolute !important;
 }

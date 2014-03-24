@@ -49,15 +49,7 @@ if (!class_exists('SmartTagInputRender')) {
          * @return void|mixed
          */
         public function process($value, array $params = array()) {
-            return $value;
-        }
-
-        /**
-         * Return the input options parsed for the TV
-         * @return mixed
-         */
-        public function getInputOptions() {
-            return '';
+            return str_replace('||', ',', $value);
         }
 
     }

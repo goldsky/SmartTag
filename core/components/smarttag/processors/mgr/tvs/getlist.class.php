@@ -27,12 +27,36 @@ require_once MODX_CORE_PATH . 'model/modx/processors/element/tv/getlist.class.ph
 class GetTVsListProcessor extends modTemplateVarGetListProcessor {
 
     public function prepareQueryBeforeCount(xPDOQuery $c) {
-        $c->leftJoin('modCategory','Category');
-        $c->where(array(
-            'type:IN' => array('autotag', 'tag', 'smarttag')
-        ));
+        $c->leftJoin('modCategory', 'Category');
+        $props = $this->getProperties();
+        if (isset($props['onlySmartTag']) && $props['onlySmartTag'] === 'true') {
+            $c->where(array(
+                'type' => 'smarttag'
+            ));
+        } else {
+            $c->where(array(
+                'type:IN' => array('autotag', 'tag', 'smarttag')
+            ));
+        }
         return $c;
     }
+
+    /**
+     * Can be used to insert a row after iteration
+     * @param array $list
+     * @return array
+     */
+    public function afterIteration(array $list) {
+        $addBlank = $this->getProperty('addBlank');
+        if ($addBlank === 'true') {
+            $list = array_merge(array(array(
+                    'id' => 0,
+                    'name' => '&nbsp;'
+                )), $list);
+        }
+        return $list;
+    }
+
 }
 
 return 'GetTVsListProcessor';

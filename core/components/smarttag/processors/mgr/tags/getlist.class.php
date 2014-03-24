@@ -49,6 +49,7 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
         }
         // for tagcloud
         if ($props['sort'] === 'count') {
+            $c->distinct();
             $c->select(array(
                 'smarttagTags.id',
                 'smarttagTags.tag',
@@ -58,7 +59,51 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
             $c->sortby('count', 'desc');
             $c->sortby('tag', 'asc');
         }
+        
+        if (isset($props['tvId']) && is_numeric($props['tvId'])) {
+            $c->innerJoin('smarttagTagresources', 'Tagresources');
+            $c->where(array(
+                'Tagresources.tmplvar_id' => $props['tvId']
+            ));
+        }
         return $c;
+    }
+
+    /**
+     * Get the data of the query
+     * @return array
+     */
+    public function getData() {
+        $data = array();
+        $limit = intval($this->getProperty('limit'));
+        $start = intval($this->getProperty('start'));
+
+        /* query for chunks */
+        $c = $this->modx->newQuery($this->classKey);
+        $c = $this->prepareQueryBeforeCount($c);
+        $props = $this->getProperties();
+        if ($props['sort'] === 'count') {
+            $data['total'] = $this->modx->smarttag->getQueryCount($this->classKey, $c);
+        } else {
+            // this fails for query with function
+            $data['total'] = $this->modx->getCount($this->classKey, $c);
+        }
+        $c = $this->prepareQueryAfterCount($c);
+
+        if ($props['sort'] !== 'count') {
+            $sortClassKey = $this->getSortClassKey();
+            $sortKey = $this->modx->getSelectColumns($sortClassKey, $this->getProperty('sortAlias', $sortClassKey), '', array($this->getProperty('sort')));
+            if (empty($sortKey)) {
+                $sortKey = $this->getProperty('sort');
+            }
+            $c->sortby($sortKey, $this->getProperty('dir'));
+        }
+        if ($limit > 0) {
+            $c->limit($limit, $start);
+        }
+
+        $data['results'] = $this->modx->getCollection($this->classKey, $c);
+        return $data;
     }
 
     /**
@@ -73,7 +118,9 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
      * @return string The JSON output.
      */
     public function outputArray(array $array, $count = false) {
-        $count = count($array);
+        if ($count === false) {
+            $count = count($array);
+        }
         return '{"success":true,"total":' . $count . ',"results":' . $this->modx->toJSON($array) . '}';
     }
 

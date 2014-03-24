@@ -41,17 +41,16 @@ foreach ($ids as $id) {
                 if (!$tvValue) {
                     continue;
                 }
-                $allValues = array();
+                
+                // getting values from parsed 'smarttag' output
+                $tvValue = str_replace(',', '||', $tvValue);
                 // getting values from 'default' output
                 $tvValues = @explode('||', $tvValue);
-                // getting values from parsed 'smarttag' output
-                foreach ($tvValues as $oriValue) {
-                    $allValues = array_merge($allValues, @explode(',', $oriValue));
-                }
+                $tvValues = array_unique($tvValues);
                 $tag = $modx->getObject('smarttagTags', $tagResIds[0])->get('tag');
-                $key = array_search($tag, $allValues);
-                unset($allValues[$key]);
-                $tvValue = @implode('||', $allValues);
+                $key = array_search($tag, $tvValues);
+                unset($tvValues[$key]);
+                $tvValue = @implode('||', $tvValues);
                 $resource->setTVValue($smarttagTagresource->get('tmplvar_id'), $tvValue);
             }
             $smarttagTagresource->remove();
