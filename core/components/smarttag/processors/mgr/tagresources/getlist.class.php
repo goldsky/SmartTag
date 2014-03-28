@@ -55,6 +55,11 @@ class TagResourcesGetListProcessor extends modObjectGetListProcessor {
                 'tag_id' => $props['tagId'],
             ));
         }
+        if (!empty($props['tvId'])) {
+            $c->where(array(
+                'tmplvar_id' => $props['tvId'],
+            ));
+        }
         $c->innerJoin('smarttagResource', 'smarttagResource', 'smarttagResource.id = smarttagTagresources.resource_id');
         $c->select(array(
             'smarttagTagresources.*',

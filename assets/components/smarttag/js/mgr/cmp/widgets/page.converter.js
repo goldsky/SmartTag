@@ -54,7 +54,10 @@ SmartTag.page.Converter = function(config) {
                         id: 'smarttag-convert-button-sync',
                         text: _('smarttag.sync'),
                         disabled: true,
-                        handler: this.syncTags
+                        handler: function(){
+                            this.syncTags();
+                        },
+                        scope: this
                     }
                 ]
             }
@@ -164,7 +167,11 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
             }
         });
     },
-    syncTags: function(btn, e) {
+    syncTags: function(limit, start) {
+        limit = limit ? limit : 500;
+        start = start ? start : 0;
+        console.info('limit, start', limit, start);
+        
         var comboBox = Ext.getCmp('smarttag-combo-tvs');
         var _this = Ext.getCmp('smarttag-page-converter');
         _this.loadMask();
@@ -172,13 +179,24 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
             url: SmartTag.config.connectorUrl,
             params: {
                 action: 'mgr/tvs/sync',
-                tvId: comboBox.getValue()
+                tvId: comboBox.getValue(),
+                limit: limit,
+                start: start
             },
             listeners: {
                 'success': {
-                    fn: function() {
+                    fn: function(response) {
                         Ext.getCmp('smarttag-combo-tvs').getStore().reload();
-                        _this.hideMask();
+                        
+                        if (response.success) {
+                            var total = response.total - 0; // typecasting
+                            if (total >= response.nextStart) {
+                                // recursive loop
+                                _this.syncTags(limit, response.nextStart);
+                            } else {
+                                _this.hideMask();
+                            }
+                        }
                     }
                 }
             }

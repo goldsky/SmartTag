@@ -22,6 +22,10 @@
  * @package smarttag
  * @subpackage snippet
  */
+$docIds = $modx->getOption('docIds', $scriptProperties);
+if (!empty($docIds)) {
+    $docIds = array_map('trim', explode(',', $docIds));
+}
 $includeEmptyTags = intval($modx->getOption('includeEmptyTags', $scriptProperties));
 $limit = intval($modx->getOption('limit', $scriptProperties, 10));
 $sort = $modx->getOption('sort', $scriptProperties, 'count desc,tag asc');
@@ -31,15 +35,25 @@ $phsPrefix = $modx->getOption('phsPrefix', $scriptProperties, 'smarttag');
 
 $smartTag = $modx->getService('smarttag', 'SmartTag', MODX_CORE_PATH . 'components/smarttag/model/');
 
-if (!($smartTag instanceof SmartTag))
+if (!($smartTag instanceof SmartTag)) {
     return '';
+}
 
 $c = $modx->newQuery('smarttagTags');
 $c->select(array(
     'smarttagTags.*',
-    'count' => "(SELECT COUNT(*) FROM {$modx->getTableName('smarttagTagresources')} AS smarttagTagresources " .
-    " WHERE smarttagTagresources.tag_id = smarttagTags.id)",
+    'count' => "(" .
+    "SELECT COUNT(*) FROM {$modx->getTableName('smarttagTagresources')} AS smarttagTagresources " .
+    "WHERE (smarttagTagresources.tag_id = smarttagTags.id " .
+    (!empty($docIds) ? "AND smarttagTagresources.resource_id IN (" . @implode(',', $docIds) . ")" : '') .
+    ")) ",
 ));
+if (!empty($docIds)) {
+    $c->leftJoin('smarttagTagresources', 'Tagresources', 'Tagresources.tag_id=smarttagTags.id');
+    $c->where(array(
+        'Tagresources.resource_id:IN' => $docIds
+    ));
+}
 $sorts = @explode(',', $sort);
 foreach ($sorts as $v) {
     $sorter = @explode(' ', strtolower($v));
@@ -47,7 +61,6 @@ foreach ($sorts as $v) {
     $sortDir = isset($sorter[1]) && in_array($sorter[1], array('asc', 'desc')) ? $sorter[1] : 'desc';
     $c->sortby($sortBy, $sortDir);
 }
-
 if (empty($includeEmptyTags)) {
     $c->having('count > 0');
 }

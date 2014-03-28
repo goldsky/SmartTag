@@ -32,7 +32,7 @@ MODx.load({
         ,html: _('required_desc')
         ,cls: 'desc-under'
     },{
-        xtype: 'textfield'
+        xtype: 'numberfield'
         ,fieldLabel: _('combo_listwidth')
         ,description: MODx.expandHelp ? '' : _('combo_listwidth_desc')
         ,name: 'inopt_listWidth'
@@ -44,6 +44,20 @@ MODx.load({
         xtype: MODx.expandHelp ? 'label' : 'hidden'
         ,forId: 'inopt_listWidth{/literal}{$tv}{literal}'
         ,html: _('combo_listwidth_desc')
+        ,cls: 'desc-under'
+    },{
+        xtype: 'numberfield'
+        ,fieldLabel: _('smarttag.query_limit') || 'queryLimit'
+        ,description: MODx.expandHelp ? '' : _('smarttag.query_limit_desc')
+        ,name: 'inopt_queryLimit'
+        ,id: 'inopt_queryLimit{/literal}{$tv}{literal}'
+        ,value: params['queryLimit'] || ''
+        ,width: 200
+        ,listeners: oc
+    },{
+        xtype: MODx.expandHelp ? 'label' : 'hidden'
+        ,forId: 'inopt_queryLimit{/literal}{$tv}{literal}'
+        ,html: _('smarttag.queryLimit_desc')
         ,cls: 'desc-under'
     },{
         xtype: 'textfield'

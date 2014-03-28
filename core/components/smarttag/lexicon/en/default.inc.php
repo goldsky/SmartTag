@@ -24,3 +24,6 @@
  */
 $_lang['smarttag'] = 'SmartTag';
 $_lang['smarttag_desc'] = 'Tags Database';
+$_lang['smarttag.href'] = 'href';
+$_lang['smarttag.queryLimit'] = 'Query limit';
+$_lang['smarttag.queryLimit_desc'] = 'Query limit of the processor. Default is 20.';

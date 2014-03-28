@@ -38,30 +38,52 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
      */
     public function prepareQueryBeforeCount(xPDOQuery $c) {
         $props = $this->getProperties();
-        if (isset($props['valuesqry']) &&
-                empty($props['valuesqry']) &&
-                isset($props['query']) &&
-                !empty($props['query'])
-        ) {
-            $c->where(array(
-                'tag:LIKE' => "%{$props['query']}%"
-            ));
+        $valuesqry = false;
+        
+        $c->distinct();
+        if (isset($props['valuesqry'])) {
+            if ($props['valuesqry'] === 'true') {
+                if (isset($props['query'])) {
+                    if (!empty($props['query'])) {
+                        $query = urldecode($props['query']);
+                        $queries = @explode('||', $query);
+                        $i = 0;
+                        $where = '';
+                        foreach ($queries as $query) {
+                            $where .= ($i !== 0 ? ' OR ' : '')  . "`smarttagTags`.`tag` LIKE '$query'";  // incasesensitive
+                            $i++;
+                        }
+                        $c->where("($where)");
+                    }
+                }
+            } else {
+                if (isset($props['query'])) {
+                    if (!empty($props['query'])) {
+                        $c->where(array(
+                            'tag:LIKE' => "%{$props['query']}%",
+                        ));
+                    }
+                }
+            }
         }
+        
+        $tvId = isset($props['tvId']) && is_numeric($props['tvId']) ? intval($props['tvId']) : '';
         // for tagcloud
-        if ($props['sort'] === 'count') {
-            $c->distinct();
+        if (strtolower($props['sort']) === 'count') {
             $c->select(array(
                 'smarttagTags.id',
                 'smarttagTags.tag',
-                'count' => "(SELECT COUNT(*) FROM {$this->modx->getTableName('smarttagTagresources')} AS smarttagTagresources " .
-                "WHERE smarttagTagresources.tag_id = smarttagTags.id)"
+                'count' => "(SELECT COUNT(*) FROM {$this->modx->getTableName('smarttagTagresources')} AS Tagresources " .
+                'WHERE (Tagresources.tag_id = smarttagTags.id ' .
+                (!empty($tvId) ? 'AND Tagresources.tmplvar_id=' . $tvId : '') .
+                '))'
             ));
             $c->sortby('count', 'desc');
             $c->sortby('tag', 'asc');
         }
         
-        if (isset($props['tvId']) && is_numeric($props['tvId'])) {
-            $c->innerJoin('smarttagTagresources', 'Tagresources');
+        if (!empty($tvId)) {
+            $c->leftJoin('smarttagTagresources', 'Tagresources', 'Tagresources.tag_id = smarttagTags.id');
             $c->where(array(
                 'Tagresources.tmplvar_id' => $props['tvId']
             ));
@@ -90,7 +112,7 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
         }
         $c = $this->prepareQueryAfterCount($c);
 
-        if ($props['sort'] !== 'count') {
+        if (strtolower($props['sort']) !== 'count') {
             $sortClassKey = $this->getSortClassKey();
             $sortKey = $this->modx->getSelectColumns($sortClassKey, $this->getProperty('sortAlias', $sortClassKey), '', array($this->getProperty('sort')));
             if (empty($sortKey)) {

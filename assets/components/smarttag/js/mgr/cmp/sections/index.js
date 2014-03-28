@@ -1,7 +1,3 @@
-Ext.onReady(function() {
-    MODx.load({xtype: 'smarttag-page-home'});
-});
-
 SmartTag.page.Home = function(config) {
     config = config || {};
     Ext.applyIf(config, {

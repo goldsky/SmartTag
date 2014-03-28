@@ -7,7 +7,8 @@ SmartTag.grid.TagResources = function(config) {
         url: SmartTag.config.connectorUrl,
         baseParams: {
             action: 'mgr/tagresources/getlist',
-            tagId: config.record.tagId
+            tagId: config.record.tagId,
+            tvId: config.record.tvId
         },
         fields: ['id', 'tag_id', 'resource_id', 'pagetitle', 'action_edit'],
         paging: true,

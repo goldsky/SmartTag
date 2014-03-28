@@ -22,15 +22,6 @@
  * @package smarttag
  * @subpackage tv
  */
-if (!class_exists('SmartTagOutputRender')) {
 
-    class SmartTagOutputRender extends modTemplateVarOutputRender {
 
-        public function process($value, array $params = array()) {
-            return str_replace('||', ',', $value);
-        }
-
-    }
-
-}
-return 'SmartTagOutputRender';
+return $modx->controller->fetchTemplate($modx->getOption('core_path') . 'components/smarttag/elements/tv/mgr/inputproperties/tpl/smarttag.tpl');

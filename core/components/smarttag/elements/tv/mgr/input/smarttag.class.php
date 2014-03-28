@@ -40,7 +40,7 @@ if (!class_exists('SmartTagInputRender')) {
         }
 
         public function getTemplate() {
-            return $this->modx->getOption('core_path') . 'components/smarttag/elements/tv/input/tpl/smarttag.tpl';
+            return $this->modx->getOption('core_path') . 'components/smarttag/elements/tv/mgr/input/tpl/smarttag.tpl';
         }
 
         /**
@@ -50,6 +50,15 @@ if (!class_exists('SmartTagInputRender')) {
          */
         public function process($value, array $params = array()) {
             return str_replace('||', ',', $value);
+        }
+
+        /**
+         * Get any lexicon topics for your render. You may override this method in your render to provide an array of
+         * lexicon topics to load.
+         * @return array
+         */
+        public function getLexiconTopics() {
+            return array('tv_widget','smarttag:default');
         }
 
     }

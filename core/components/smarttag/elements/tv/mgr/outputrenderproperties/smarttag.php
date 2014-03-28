@@ -22,15 +22,6 @@
  * @package smarttag
  * @subpackage tv
  */
-if (!class_exists('SmartTagInputRenderProperties')) {
 
-    class SmartTagInputRenderProperties extends modTemplateVarInputRender {
 
-        public function getTemplate() {
-            return $this->modx->getOption('core_path') . 'components/smarttag/elements/tv/inputproperties/tpl/smarttag.tpl';
-        }
-
-    }
-
-}
-return 'SmartTagInputRenderProperties';
+return $modx->controller->fetchTemplate($modx->getOption('core_path') . 'components/smarttag/elements/tv/mgr/outputrenderproperties/tpl/smarttag.tpl');

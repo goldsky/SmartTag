@@ -37,20 +37,11 @@ if (function_exists('ini_get') && !ini_get('safe_mode')) {
 
 class TVsSyncProcessor extends modObjectGetListProcessor {
     public $classKey = 'modTemplateVarResource';
-    public $defaultSortField = 'tmplvarid';
+    public $defaultSortField = 'contentid';
     public $languageTopics = array('smarttag:cmp');
     public $objectType = 'smarttag.TVsSync';
     private $_count = 0;
     
-    /**
-     * {@inheritDoc}
-     * @return boolean
-     */
-    public function initialize() {
-        $this->setProperty('limit', 0);
-        return parent::initialize();
-    }
-
     /**
      * Can be used to adjust the query prior to the COUNT statement
      *
@@ -66,20 +57,13 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
     }
 
     /**
-     * Allow stoppage of process before the query
-     * @return boolean
-     */
-    public function beforeQuery() {
-        return true;
-    }
-
-    /**
      * Prepare the row for iteration
      * @param xPDOObject $object
      * @return array
      */
     public function prepareRow(xPDOObject $object) {
         $objectArray = $object->toArray();
+        
         $values = array_map('trim', @explode('||', $objectArray['value']));
         if (!empty($values)) {
             foreach ($values as $value) {
@@ -92,7 +76,10 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
                 if (!$tag) {
                     $tag = $this->modx->newObject('smarttagTags');
                     $tag->set('tag', $value);
-                    $tag->save();
+                    if ($tag->save() === false) {
+                        $this->modx->log(modX::LOG_LEVEL_ERROR, __LINE__ . ': Error on saving new tag data: ' . $value);
+                        continue;
+                    }
                 }
                 $params = array(
                     'tag_id' => $tag->getPrimaryKey(),
@@ -103,12 +90,14 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
                 if (!$smarttagTagresource) {
                     $smarttagTagresource = $this->modx->newObject('smarttagTagresources');
                     $smarttagTagresource->fromArray($params, NULL, TRUE, TRUE);
-                    $smarttagTagresource->save();
+                    if ($smarttagTagresource->save() === false) {
+                        $this->modx->log(modX::LOG_LEVEL_ERROR, __LINE__ . ': Error on saving new tag resource data: ' . print_r($params, 1));
+                        continue;
+                    }
                     $this->_count++;
                 }
             }
-        }
-        
+        }        
         
         return $objectArray;
     }
@@ -124,8 +113,17 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
      * @param mixed $count The total number of objects. Used for pagination.
      * @return string The JSON output.
      */
-    public function outputArray(array $array,$count = false) {
-        return '{"success":true,"total":"' . $this->_count . '","results":""}';
+    public function outputArray(array $array, $count = false) {
+        if ($count === false) {
+            $count = count($array);
+        }
+        $output = array(
+            'success' => true,
+            'total' => $count,
+            'totalSynced' => $this->_count,
+            'nextStart' => intval($this->getProperty('start')) + intval($this->getProperty('limit')),
+        );
+        return json_encode($output);
     }
 
 }

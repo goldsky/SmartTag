@@ -1,40 +1,41 @@
-<input id="tv{$tv->id}" name="tv{$tv->id}[]"
-	type="text" class="textfield"
-	value="{$tv->get('value')|escape}"
-	{$style}
-	tvtype="{$tv->type}"
-/>
-
+<div id="tv{$tv->id}"></div>
 <script type="text/javascript">
 // <![CDATA[
 {literal}
 Ext.onReady(function() {
+    var tagStore = new Ext.data.JsonStore({
+        url: SmartTag.config.connectorUrl
+        ,totalProperty:'total'
+        ,root:'results'
+        ,baseParams: {
+            action: 'mgr/tags/getlist'
+            ,tvId: {/literal}{$tv->id}{literal}
+            ,sort: 'tag'
+            ,dir: 'ASC'
+            ,limit: {/literal}{if $params.queryLimit}{$params.queryLimit}{else}20{/if}{literal}
+        }
+        ,autoLoad: true
+        ,autoSave: false
+        ,dir: 'ASC'
+        ,fields: ['id', 'tag']
+    });
+
     var fld{/literal}{$tv->id}{literal} = new Ext.ux.form.SuperBoxSelect({
     {/literal}
         xtype:'superboxselect'
         ,transform: 'tv{$tv->id}'
         ,id: 'tv{$tv->id}'
+        ,name: "tv{$tv->id}[]"
         ,triggerAction: 'all'
         ,mode: 'remote'
-        ,store: new Ext.data.JsonStore({
-            autoLoad: true,
-            root: 'results',
-            dir: 'ASC',
-            fields: ['id', 'tag'],
-            url: SmartTag.config.connectorUrl,
-            baseParams: {
-                action: 'mgr/tags/getlist'
-                ,tvId: {$tv->id}
-                ,sort: 'tag'
-                ,dir: 'ASC'
-            }
-        })
+        ,store: tagStore
         ,pageSize: 20
         ,minChars: 1
         ,allowAddNewData: true
+        ,addNewDataOnBlur : true
         ,value: "{$tv->get('value')|escape}"
-        //,valueDelimiter: "||"
-        //,queryValuesDelimiter: "||"
+        ,valueDelimiter: "||"
+        ,queryValuesDelimiter: "||"
         ,originalValue: "{$tv->get('value')|escape}"
         ,extraItemCls: 'x-tag'
         ,width: 400
@@ -75,6 +76,7 @@ Ext.onReady(function() {
             ,'clear': {fn:MODx.fireResourceFormChange, scope:this}
         }
     });
+    
     Ext.getCmp('modx-panel-resource').getForm().add(fld{/literal}{$tv->id}{literal});
 });
 {/literal}

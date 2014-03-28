@@ -28,3 +28,4 @@ $_lang['smarttag.sort'] = 'Comma delimited multiple sorting. Format: field direc
 $_lang['smarttag.tplWrapper'] = 'Name of chunk for wrapper template of the output. @BINDING enabled (eg: @FILE:[path/to/file.tpl])';
 $_lang['smarttag.tplItem'] = 'Name of chunk for item template of the output. @BINDING enabled (eg: @FILE:[path/to/file.tpl])';
 $_lang['smarttag.phsPrefix'] = 'Prefix for the placeholders';
+$_lang['smarttag.docIds'] = 'Comma delimited values of Documents\' IDs';

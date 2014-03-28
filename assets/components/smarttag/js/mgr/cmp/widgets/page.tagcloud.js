@@ -190,17 +190,23 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
                                     text: item.tag + ' | ' + item.count,
                                     cls: 'smarttag-tag-btn',
                                     handler: function(btn, e) {
-                                        _this.openTagTab(item);
+                                        _this.openTagTab(item, tvId);
                                     }
                                 });
                                 _this.countBtns++;
                             });
-                            if (_this.countBtns >= response.total) {
-                                Ext.getCmp('smarttag-panel-tagcloud-loadmore-button').setDisabled(true);
-                            } else {
-                                Ext.getCmp('smarttag-panel-tagcloud-loadmore-button').setDisabled(false);
+                            var loadmoreButton = Ext.getCmp('smarttag-panel-tagcloud-loadmore-button');
+                            if (loadmoreButton) {
+                                if (_this.countBtns >= response.total) {
+                                    loadmoreButton.setDisabled(true);
+                                } else {
+                                    loadmoreButton.setDisabled(false);
+                                }
                             }
-                            Ext.getCmp('smarttag-tagcloud-total-count').update(_this.countBtns + '/' + response.total);
+                            var totalCount = Ext.getCmp('smarttag-tagcloud-total-count');
+                            if (totalCount) {
+                                totalCount.update(_this.countBtns + '/' + response.total);
+                            }
                             _this.doLayout();
                             cmp.doLayout();
                         }
@@ -222,7 +228,7 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
     hideMask: function() {
         this.loadCloudMask.hide();
     },
-    openTagTab: function(item) {
+    openTagTab: function(item, tvId) {
         var tabsWrapper = Ext.getCmp('smarttag-panel-tagcloud-tabs');
         var check = Ext.getCmp('smarttag-panel-tagcloud-tab-' + item.id);
         if (!check) {
@@ -238,7 +244,8 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
                     {
                         xtype: 'smarttag-grid-tagresources',
                         record: {
-                            tagId: item.id
+                            tagId: item.id,
+                            tvId: tvId
                         }
                     }
                 ]

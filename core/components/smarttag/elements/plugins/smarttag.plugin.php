@@ -25,16 +25,20 @@
 $corePath = $modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/smarttag/';
 switch ($modx->event->name) {
     case 'OnTVInputRenderList':
-        $modx->event->output($corePath . 'elements/tv/input/');
+        $modx->lexicon->load('smarttag:default');
+        $modx->event->output($corePath . 'elements/tv/mgr/input/');
         break;
     case 'OnTVOutputRenderList':
-        $modx->event->output($corePath . 'elements/tv/output/');
+        $modx->lexicon->load('smarttag:default');
+        $modx->event->output($corePath . 'elements/tv/web/output/');
         break;
     case 'OnTVInputPropertiesList':
-        $modx->event->output($corePath . 'elements/tv/inputproperties/');
+        $modx->lexicon->load('smarttag:default');
+        $modx->event->output($corePath . 'elements/tv/mgr/inputproperties/');
         break;
     case 'OnTVOutputRenderPropertiesList':
-        $modx->event->output($corePath . 'elements/tv/outputrenderproperties/');
+        $modx->lexicon->load('smarttag:default');
+        $modx->event->output($corePath . 'elements/tv/mgr/outputrenderproperties/');
         break;
     case 'OnDocFormSave':
         $tvs = $resource->getTemplateVars();

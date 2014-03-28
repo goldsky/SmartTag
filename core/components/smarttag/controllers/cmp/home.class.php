@@ -40,6 +40,11 @@ class SmartTagCmpHomeManagerController extends SmartTagManagerController {
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.tagcloud.js');
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.home.js');
         $this->addLastJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/sections/index.js');
+        $this->addHtml('<script type="text/javascript">
+        Ext.onReady(function() {
+            MODx.load({xtype: "smarttag-page-home"});
+        });
+        </script>');
     }
 
     public function getTemplateFile() {
