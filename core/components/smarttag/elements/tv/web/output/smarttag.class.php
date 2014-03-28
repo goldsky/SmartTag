@@ -28,19 +28,19 @@ if (!class_exists('SmartTagOutputRender')) {
 
         public function process($value, array $params = array()) {
             $values = $this->tv->parseInput($value, "||", 'array');
-            $delimiter = isset($params['delimiter']) ? $params['delimiter'] : ',';
+            $delimiter = isset($params['delimiter']) && !empty($params['delimiter']) ? $params['delimiter'] : ', ';
             if ($delimiter == "\\n") {
                 $delimiter = "\n";
             }
 
             $oArray = array();
             if (!empty($params['href'])) {
-                for ($i = 0; $i < count($value); $i++) {
+                foreach ($values as $value) {
                     $attributes = '';
                     /* setup the link attributes */
                     $attr = array(
                         'href' => $params['href'],
-                        'title' => !empty($params['title']) ? htmlspecialchars($params['title']) : $name,
+                        'title' => !empty($params['title']) ? htmlspecialchars($params['title']) : $value,
                         'class' => !empty($params['class']) ? $params['class'] : null,
                         'style' => !empty($params['style']) ? $params['style'] : null,
                         'target' => !empty($params['target']) ? $params['target'] : null,
@@ -53,12 +53,12 @@ if (!class_exists('SmartTagOutputRender')) {
                     }
 
                     /* Output the link */
-                    $oArray[] = '<a' . rtrim($attributes) . '>' . (!empty($params['text']) ? htmlspecialchars($params['text']) : $name) . '</a>';
+                    $oArray[] = '<a' . rtrim($attributes) . '>' . (!empty($params['text']) ? htmlspecialchars($params['text']) : $value) . '</a>';
                 }
                 $values = $oArray;
             }
-            $values = @implode($delimiter, $values);
-            return $value;
+            
+            return @implode($delimiter, $values);
         }
 
     }
