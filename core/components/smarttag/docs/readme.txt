@@ -1,5 +1,5 @@
 -----------------------
-Package: GridClassKey
+Package: SmartTag
 -----------------------
 Author: goldsky <goldsky@virtudraft.com>
         http://twitter.com/_goldsky
