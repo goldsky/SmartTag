@@ -60,7 +60,8 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
                 if (isset($props['query'])) {
                     if (!empty($props['query'])) {
                         $c->where(array(
-                            'tag:LIKE' => "%{$props['query']}%",
+                            'tag:LIKE' => "{$props['query']}%",
+                            'OR:tag:LIKE' => "% {$props['query']}%",
                         ));
                     }
                 }

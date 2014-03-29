@@ -1,5 +1,6 @@
 SmartTag
 ==============================================
+- [#2] set the query to search for tags that begin with, rather than contain the typed phrase
 - [#1] initiate search when pressing enter on the search box
 
 SmartTag 1.0.0-beta1 (Mar 28, 2014)
