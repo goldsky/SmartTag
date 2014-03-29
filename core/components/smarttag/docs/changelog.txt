@@ -1,3 +1,7 @@
+SmartTag
+==============================================
+- [#1] initiate search when pressing enter on the search box
+
 SmartTag 1.0.0-beta1 (Mar 28, 2014)
 ==============================================
 * initial commit

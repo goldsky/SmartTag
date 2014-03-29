@@ -40,7 +40,24 @@ SmartTag.page.TagCloud = function(config) {
                                         name: 'smarttag-tagcloud-search',
                                         id: 'smarttag-tagcloud-search',
                                         fieldLabel: _('search'),
-                                        width: 100
+                                        width: 100,
+                                        listeners: {
+                                            'render': {
+                                                fn: function(cmp) {
+                                                    var _this = this;
+                                                    new Ext.KeyMap(cmp.getEl(), {
+                                                        key: Ext.EventObject.ENTER,
+                                                        fn: function() {
+                                                            _this.loadCloud();
+                                                            this.blur();
+                                                            return true;
+                                                        },
+                                                        scope: cmp
+                                                    });
+                                                },
+                                                scope: this
+                                            }
+                                        }
                                     }, {
                                         html: _('smarttag.limit') + ' : ',
                                         border: false,
