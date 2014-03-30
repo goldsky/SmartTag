@@ -50,7 +50,7 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
                         $i = 0;
                         $where = '';
                         foreach ($queries as $query) {
-                            $where .= ($i !== 0 ? ' OR ' : '')  . "`smarttagTags`.`tag` LIKE '$query'";  // incasesensitive
+                            $where .= ($i !== 0 ? ' OR ' : '')  . "`smarttagTags`.`tag` LIKE '$query'";  // case-insensitive
                             $i++;
                         }
                         $c->where("($where)");

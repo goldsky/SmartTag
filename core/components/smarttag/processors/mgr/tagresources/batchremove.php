@@ -34,6 +34,8 @@ foreach ($ids as $id) {
         'resource_id' => $tagResIds[1],
     ));
     if ($smarttagTagresources) {
+        $tag = $modx->getObject('smarttagTags', $tagResIds[0])->get('tag');
+        $tag = trim($tag);
         foreach ($smarttagTagresources as $smarttagTagresource) {
             $resource = $modx->getObject('modResource', $smarttagTagresource->get('resource_id'));
             if ($resource) {
@@ -45,9 +47,8 @@ foreach ($ids as $id) {
                 // getting values from parsed 'smarttag' output
                 $tvValue = str_replace(',', '||', $tvValue);
                 // getting values from 'default' output
-                $tvValues = @explode('||', $tvValue);
+                $tvValues = array_map('trim', @explode('||', $tvValue));
                 $tvValues = array_unique($tvValues);
-                $tag = $modx->getObject('smarttagTags', $tagResIds[0])->get('tag');
                 $key = array_search($tag, $tvValues);
                 unset($tvValues[$key]);
                 $tvValue = @implode('||', $tvValues);
@@ -57,4 +58,5 @@ foreach ($ids as $id) {
         }
     }
 }
+
 return $this->success();

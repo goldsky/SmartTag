@@ -57,7 +57,9 @@ class TVsUpdateFromSmartTagProcessor extends modObjectUpdateProcessor {
         if ($existingTVRes) {
             foreach ($existingTVRes as $v) {
                 $value = $v->get('value');
-                $value = str_replace('||', ',', $value);
+                $tvValues = array_map('trim', @explode('||', $value));
+                $tvValues = array_unique($tvValues);
+                $value = @implode(',', $tvValues);
                 $v->set('value', $value);
                 $v->save();
                 // $this->_removeTags($v->toArray());

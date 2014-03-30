@@ -57,7 +57,8 @@ class TVsUpdateToSmartTagProcessor extends modObjectUpdateProcessor {
         if ($existingTVRes) {
             foreach ($existingTVRes as $v) {
                 $value = $v->get('value');
-                $value = str_replace(',', '||', $value);
+                $values = array_map('trim', @explode(',', $value));
+                $value = @implode('||', $values);
                 $v->set('value', $value);
                 $v->save();
                 $this->_insertTags($v->toArray());
@@ -67,7 +68,7 @@ class TVsUpdateToSmartTagProcessor extends modObjectUpdateProcessor {
     }
 
     private function _insertTags($TVRes) {
-        $values = explode('||', $TVRes['value']);
+        $values = array_map('trim', @explode('||', $TVRes['value']));
         foreach ($values as $value) {
             $tag = $this->modx->getObject('smarttagTags', array(
                 'tag' => $value

@@ -48,6 +48,8 @@ class TagsUpdateProcessor extends modObjectUpdateProcessor {
     public function beforeSet() {
         $smarttagTagresources = $this->object->getMany('Tagresources');
         if ($smarttagTagresources) {
+            $tag = $this->object->get('tag');
+            $tag = trim($tag);
             foreach ($smarttagTagresources as $smarttagTagresource) {
                 $resource = $this->modx->getObject('modResource', $smarttagTagresource->get('resource_id'));
                 if (!$resource) {
@@ -61,10 +63,10 @@ class TagsUpdateProcessor extends modObjectUpdateProcessor {
                 // getting values from parsed 'smarttag' output
                 $tvValue = str_replace(',', '||', $tvValue);
                 // getting values from 'default' output
-                $tvValues = @explode('||', $tvValue);
+                $tvValues = array_map('trim', @explode('||', $tvValue));
                 $tvValues = array_unique($tvValues);
-                $key = array_search($this->object->get('tag'), $tvValues);
-                $tvValues[$key] = $this->getProperty('tag');
+                $key = array_search($tag, $tvValues);
+                $tvValues[$key] = $tag;
                 $tvValue = @implode('||', $tvValues);
                 $resource->setTVValue($smarttagTagresource->get('tmplvar_id'), $tvValue);
             }
