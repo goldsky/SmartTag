@@ -50,9 +50,11 @@ class TagsRemoveProcessor extends modObjectRemoveProcessor {
                 $tvValues = @explode('||', $tvValue);
                 $tvValues = array_unique($tvValues);
                 $key = array_search($this->object->get('tag'), $tvValues);
-                unset($tvValues[$key]);
-                $tvValue = @implode('||', $tvValues);
-                $resource->setTVValue($smarttagTagresource->get('tmplvar_id'), $tvValue);
+                if (is_numeric($key)) {
+                    unset($tvValues[$key]);
+                    $tvValue = @implode('||', $tvValues);
+                    $resource->setTVValue($smarttagTagresource->get('tmplvar_id'), $tvValue);
+                }
             }
         }
         return parent::beforeRemove();

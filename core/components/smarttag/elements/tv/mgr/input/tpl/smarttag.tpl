@@ -34,14 +34,14 @@ Ext.onReady(function() {
         ,allowAddNewData: true
         ,addNewDataOnBlur : true
         ,value: "{$tv->get('value')|escape}"
-        ,valueDelimiter: "||"
+        ,valueDelimiter: ","
         ,queryValuesDelimiter: "||"
         ,originalValue: "{$tv->get('value')|escape}"
         ,extraItemCls: 'x-tag'
         ,width: 400
         ,displayField: "tag"
         ,valueField: "tag"
-        ,queryDelay: 30
+        ,queryDelay: 1000
         ,resizable: true
         ,hideTrigger: true
         ,allowBlank: {if $params.allowBlank == 1 || $params.allowBlank == 'true'}true{else}false{/if}
@@ -59,10 +59,10 @@ Ext.onReady(function() {
         {if $params.listEmptyText}
             ,listEmptyText: '{$params.listEmptyText}'
         {/if}
+        ,autoSelect: false
         ,forceSelection: false
         ,stackItems: {if $params.stackItems && $params.stackItems != 'false'}true{else}false{/if}
         ,msgTarget: 'under'
-
         {literal}
         ,listeners: {
             'select': {fn:MODx.fireResourceFormChange, scope:this}

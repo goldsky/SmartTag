@@ -40,6 +40,7 @@ if (!($smartTag instanceof SmartTag)) {
 }
 
 $c = $modx->newQuery('smarttagTags');
+$c->distinct();
 $c->select(array(
     'smarttagTags.*',
     'count' => "(" .
@@ -75,15 +76,35 @@ $outputArray = array();
 $wrapper = array(
     'tags' => null
 );
+$toArray = $modx->getOption('toArray', $scriptProperties);
+
 if ($collection) {
     $items = array();
     foreach ($collection as $item) {
         $phs = $smartTag->setPlaceholders($item->toArray(), $phsPrefix);
-        $items[] = $smartTag->parseTpl($tplItem, $phs);
+        if ($toArray) {
+            $items[] = $phs;
+        } else {
+            $items[] = $smartTag->parseTpl($tplItem, $phs);
+        }
     }
-    $wrapper['tags'] = @implode("\n", $items);
-    $phs = $smartTag->setPlaceholders($wrapper, $phsPrefix);
-    $output = $smartTag->parseTpl($tplWrapper, $phs);
+    if ($toArray) {
+        $wrapper['tags'] = $items;
+        $phs = $smartTag->setPlaceholders($wrapper, $phsPrefix);
+        $outputArray = array(
+            'properties' => $scriptProperties,
+            'output' => $phs,
+        );
+        $output = '<pre>' . print_r($outputArray, 1) . '</pre>';
+    } else {
+        $wrapper['tags'] = @implode("\n", $items);
+        $phs = $smartTag->setPlaceholders($wrapper, $phsPrefix);
+        $output = $smartTag->parseTpl($tplWrapper, $phs);
+    }
 }
-
+$toPlaceholder = $modx->getOption('toPlaceholder', $scriptProperties);
+if (!empty($toPlaceholder)) {
+    $modx->setPlaceholder($toPlaceholder, $output);
+    return;
+}
 return $output;

@@ -50,9 +50,11 @@ foreach ($ids as $id) {
                 $tvValues = array_map('trim', @explode('||', $tvValue));
                 $tvValues = array_unique($tvValues);
                 $key = array_search($tag, $tvValues);
-                unset($tvValues[$key]);
-                $tvValue = @implode('||', $tvValues);
-                $resource->setTVValue($smarttagTagresource->get('tmplvar_id'), $tvValue);
+                if (is_numeric($key)) {
+                    unset($tvValues[$key]);
+                    $tvValue = @implode('||', $tvValues);
+                    $resource->setTVValue($smarttagTagresource->get('tmplvar_id'), $tvValue);
+                }
             }
             $smarttagTagresource->remove();
         }
