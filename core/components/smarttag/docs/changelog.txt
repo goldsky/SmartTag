@@ -1,4 +1,4 @@
-SmartTag 1.0.0-beta4
+SmartTag 1.0.0-beta4 (Apr 2, 2014)
 ==============================================
 - raise the time for typing before the drop down showing up
 - bugfix on smarttagTags snippet output
