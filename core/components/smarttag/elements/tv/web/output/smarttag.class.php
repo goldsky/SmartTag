@@ -33,6 +33,12 @@ if (!class_exists('SmartTagOutputRender')) {
                 $delimiter = "\n";
             }
 
+            $smartTag = $this->modx->getService('smarttag', 'SmartTag', MODX_CORE_PATH . 'components/smarttag/model/');
+
+            if (!($smartTag instanceof SmartTag)) {
+                return '';
+            }
+
             $oArray = array();
             if (!empty($params['href'])) {
                 foreach ($values as $value) {
@@ -53,7 +59,13 @@ if (!class_exists('SmartTagOutputRender')) {
                     }
 
                     /* Output the link */
-                    $oArray[] = '<a' . rtrim($attributes) . '>' . (!empty($params['text']) ? htmlspecialchars($params['text']) : $value) . '</a>';
+                    $output = '<a' . rtrim($attributes) . '>' . (!empty($params['text']) ? htmlspecialchars($params['text']) : $value) . '</a>';
+                    $phs = array(
+                        'value' => $value,
+                    );
+                    $output = $smartTag->parseTplCode($output, $phs);
+                    $output = $smartTag->processElementTags($output);
+                    $oArray[] = $output;
                 }
                 $values = $oArray;
             }
