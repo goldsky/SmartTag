@@ -40,7 +40,7 @@ SmartTag.panel.Home = function(config) {
                                 border: false,
                                 cls: 'modx-page-header'
                             }, {
-                                xtype: 'buttongroup',
+                                xtype: 'toolbar',
                                 id: 'smarttag-top-nav',
                                 title: '',
                                 columns: 2,

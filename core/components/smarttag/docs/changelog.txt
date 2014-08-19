@@ -1,5 +1,6 @@
 SmartTag 1.0.0-dev
 ==============================================
+- replace buttongroup with toolbar for top menu
 - [#8] System setting to change default 50
 
 SmartTag 1.0.0-beta6 (Apr 7, 2014)
