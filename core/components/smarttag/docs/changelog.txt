@@ -1,5 +1,6 @@
 SmartTag 1.0.0-dev
 ==============================================
+- [#6] Right click on tag grid to view resource on front end
 - [#12] Rename Tag dialogue box should pre-populate the field with the old name
 - replace buttongroup with toolbar for top menu
 - [#8] System setting to change default 50

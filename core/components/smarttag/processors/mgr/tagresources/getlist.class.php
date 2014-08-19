@@ -29,16 +29,25 @@ class TagResourcesGetListProcessor extends modObjectGetListProcessor {
     public $defaultSortField = 'resource_id';
     public $defaultSortDirection = 'ASC';
     public $objectType = 'smarttag.TagResourcesGetList';
+    /** @var modAction $editAction */
+    public $editAction;
 
     /**
      * {@inheritDoc}
      * @return boolean
      */
     public function initialize() {
-        $this->editAction = $this->modx->getObject('modAction', array(
-            'namespace' => 'core',
-            'controller' => 'resource/update',
-        ));
+        $vers = $this->modx->getVersionData();
+        $ver_comp = version_compare($vers['full_version'], '2.3.0');
+        if ($ver_comp >= 0) {
+            $this->editAction = 'resource/update';
+        } else {
+            $editAction = $this->modx->getObject('modAction', array(
+                'namespace' => 'core',
+                'controller' => 'resource/update',
+            ));
+            $this->editAction = $editAction->get('id');
+        }
         return parent::initialize();
     }
 
@@ -76,7 +85,13 @@ class TagResourcesGetListProcessor extends modObjectGetListProcessor {
      */
     public function prepareRow(xPDOObject $object) {
         $objectArray = parent::prepareRow($object);
-        $objectArray['action_edit'] = '?a=' . $this->editAction->get('id') . '&id=' . $objectArray['resource_id'];
+        $objectArray['action_edit'] = '?a=' . $this->editAction . '&id=' . $objectArray['resource_id'];
+        $resource = $this->modx->getObject('modResource', $objectArray['resource_id']);
+        if ($resource) {
+            $this->modx->getContext($resource->get('context_key'));
+            $objectArray['preview_url'] = $this->modx->makeUrl($objectArray['resource_id'], $resource->get('context_key'), null, 'full');
+        }
+
         return $objectArray;
     }
 

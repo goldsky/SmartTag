@@ -10,7 +10,7 @@ SmartTag.grid.TagResources = function(config) {
             tagId: config.record.tagId,
             tvId: config.record.tvId
         },
-        fields: ['id', 'tag_id', 'resource_id', 'pagetitle', 'action_edit'],
+        fields: ['id', 'tag_id', 'resource_id', 'pagetitle', 'action_edit', 'resource_id', 'preview_url'],
         paging: true,
         remoteSort: true,
         autoExpandColumn: 'pagetitle',
@@ -71,6 +71,23 @@ SmartTag.grid.TagResources = function(config) {
     this._makeTemplates();
 };
 Ext.extend(SmartTag.grid.TagResources, MODx.grid.Grid, {
+    getMenu: function() {
+        var menu = [
+            {
+                text: _('edit'),
+                handler: function(btn, e) {
+                    MODx.loadPage(MODx.action['resource/update'], 'id=' + this.menu.record.resource_id);
+                }
+            }, {
+                text: _('view'),
+                handler: function(btn, e) {
+                    window.open(this.menu.record.preview_url);
+                }
+            }
+        ];
+        
+        return menu;
+    },
     deleteTag: function(tagId) {
         MODx.msg.confirm({
             title: _('smarttag.remove'),
