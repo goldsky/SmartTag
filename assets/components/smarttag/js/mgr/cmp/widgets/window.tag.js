@@ -16,7 +16,9 @@ SmartTag.window.Tag = function(config) {
                 fieldLabel: _('smarttag.tag') + ':',
                 name: 'tag',
                 allowBlank:  false,
-                anchor: '100%'
+                anchor: '100%',
+                value: config.record &&
+                        config.record.tag ? config.record.tag : ''
             }
         ]
     });

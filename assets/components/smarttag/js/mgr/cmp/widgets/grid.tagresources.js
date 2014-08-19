@@ -100,6 +100,7 @@ Ext.extend(SmartTag.grid.TagResources, MODx.grid.Grid, {
                 action: 'mgr/tags/update'
             },
             record: {
+                tag: this.config.record.tag,
                 id: tagId
             },
             listeners: {

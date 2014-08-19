@@ -261,6 +261,7 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
                     {
                         xtype: 'smarttag-grid-tagresources',
                         record: {
+                            tag: item.tag,
                             tagId: item.id,
                             tvId: tvId
                         }
