@@ -1,7 +1,7 @@
 SmartTag.panel.Home = function(config) {
     config = config || {};
 
-    Ext.apply(config, {
+    Ext.applyIf(config, {
         id: 'smarttag-panel-home',
         baseCls: 'modx-formpanel',
         layout: 'border',

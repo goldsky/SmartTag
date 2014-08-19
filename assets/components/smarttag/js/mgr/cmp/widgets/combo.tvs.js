@@ -1,7 +1,7 @@
 SmartTag.combo.TVs = function(config) {
     config = config || {};
 
-    Ext.apply(config, {
+    Ext.applyIf(config, {
         url: SmartTag.config.connectorUrl
         , baseParams: {
             action: 'mgr/tvs/getlist',

@@ -1,7 +1,7 @@
 SmartTag.page.Converter = function(config) {
     config = config || {};
 
-    Ext.apply(config, {
+    Ext.applyIf(config, {
         id: 'smarttag-page-converter',
         baseCls: 'modx-formpanel',
         bodyStyle: 'min-height: 500px; overflow-y: scroll;',
