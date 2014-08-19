@@ -34,9 +34,11 @@ abstract class SmartTagManagerController extends modExtraManagerController {
 
         $this->addCss($this->smarttag->config['cssUrl'] . 'mgr.css');
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/smarttag.js');
+        $limit = $this->modx->getOption('smarttag.limit', '', 50);
+        $configs = array_merge($this->smarttag->config, array('limit' => $limit));
         $this->addHtml('<script type="text/javascript">
         Ext.onReady(function() {
-            SmartTag.config = ' . $this->modx->toJSON($this->smarttag->config) . ';
+            SmartTag.config = ' . $this->modx->toJSON($configs) . ';
         });
         </script>');
 

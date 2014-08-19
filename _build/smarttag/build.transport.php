@@ -101,6 +101,27 @@ if (empty($menu)) {
 }
 
 /**
+ * SYSTEM SETTINGS
+ */
+$settings = include $sources['data'] . 'transport.settings.php';
+if (!is_array($settings)) {
+    $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in settings.');
+} else {
+    $modx->log(modX::LOG_LEVEL_INFO, 'Packaging in System Settings...');
+    $settingAttributes = array(
+        xPDOTransport::UNIQUE_KEY => 'key',
+        xPDOTransport::PRESERVE_KEYS => true,
+        xPDOTransport::UPDATE_OBJECT => false,
+    );
+    foreach ($settings as $setting) {
+        $settingVehicle = $builder->createVehicle($setting, $settingAttributes);
+        $builder->putVehicle($settingVehicle);
+    }
+    $modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($settings) . ' System Settings done.');
+    unset($settingVehicle, $settings, $setting, $settingAttributes);
+}
+
+/**
  * CATEGORY
  */
 $category = $modx->newObject('modCategory');

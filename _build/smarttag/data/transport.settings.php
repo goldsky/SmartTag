@@ -19,13 +19,22 @@
  * SmartTag; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
  * Suite 330, Boston, MA 02111-1307 USA
  *
+ * SmartTag build script
+ *
  * @package smarttag
- * @subpackage i18n
+ * @subpackage build
  */
-$_lang['smarttag'] = 'SmartTag';
-$_lang['smarttag_desc'] = 'Tags Database';
-$_lang['smarttag.href'] = 'href';
-$_lang['smarttag.queryLimit'] = 'Query limit';
-$_lang['smarttag.queryLimit_desc'] = 'Query limit of the processor. The default is 20.';
-$_lang['setting_smarttag.limit'] = 'Tag list limit';
-$_lang['setting_smarttag.limit_desc'] = 'Query limit of the tag list in Custom Manager Page (CMP). The default is 50.';
+/**
+ * @param   string  $filename   filename
+ * @return  string  file content
+ */
+$settings['smarttag.limit'] = $modx->newObject('modSystemSetting');
+$settings['smarttag.limit']->fromArray(array(
+    'key' => 'smarttag.limit',
+    'value' => 50,
+    'xtype' => 'textfield',
+    'namespace' => 'smarttag',
+    'area' => '',
+        ), '', true, true);
+
+return $settings;

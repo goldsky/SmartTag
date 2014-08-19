@@ -1,7 +1,7 @@
 SmartTag.page.TagCloud = function(config) {
     config = config || {};
 
-    Ext.apply(config, {
+    Ext.applyIf(config, {
         id: 'smarttag-page-tagcloud',
         baseCls: 'modx-formpanel',
         bodyStyle: 'min-height: 500px; overflow-y: scroll;',
@@ -69,7 +69,7 @@ SmartTag.page.TagCloud = function(config) {
                                         name: 'smarttag-tagcloud-limit',
                                         id: 'smarttag-tagcloud-limit',
                                         width: 100,
-                                        value: 50
+                                        value: SmartTag.config.limit
                                     }, {
                                         html: _('name') + ' : ',
                                         border: false,
@@ -193,7 +193,7 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
                 limit: limit,
                 start: this.start,
                 query: search,
-                valuesqry: '',
+                //valuesqry: '',
                 tvId: tvId
             },
             listeners: {
