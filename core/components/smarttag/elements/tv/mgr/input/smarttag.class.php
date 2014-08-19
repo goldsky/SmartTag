@@ -35,6 +35,7 @@ if (!class_exists('SmartTagInputRender')) {
         <script type="text/javascript">
         // <![CDATA[
         SmartTag.config.connectorUrl = "' . $connectorUrl . '";
+        MODx.config.friendly_alias_restrict_chars_pattern = ' . $this->modx->getOption('friendly_alias_restrict_chars_pattern') . ';
         // ]]>
         </script>');
         }

@@ -68,6 +68,7 @@ Ext.onReady(function() {
             'select': {fn:MODx.fireResourceFormChange, scope:this}
             ,'beforeadditem': {fn:MODx.fireResourceFormChange, scope:this}
             ,'newitem': {fn:function(bs,v,f) {
+                v = v.replace(MODx.config.friendly_alias_restrict_chars_pattern, '').toLowerCase()
                 bs.addNewItem({"id": v,"tag": v});
                 MODx.fireResourceFormChange();
                 return true;
