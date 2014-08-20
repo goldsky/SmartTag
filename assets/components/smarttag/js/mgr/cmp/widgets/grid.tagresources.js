@@ -124,7 +124,21 @@ Ext.extend(SmartTag.grid.TagResources, MODx.grid.Grid, {
                 'success': {
                     fn: function(response) {
                         Ext.getCmp('smarttag-page-tagcloud').loadCloud();
-                        Ext.getCmp('smarttag-panel-tagcloud-tab-' + tagId).setTitle(response.a.result.object['tag']);
+                        if (response.a.result.object.merged) {
+                            var tabsWrapper = Ext.getCmp('smarttag-panel-tagcloud-tabs');
+                            var oldTab = Ext.getCmp('smarttag-panel-tagcloud-tab-' + response.a.result.object.merged.id);
+                            if (tabsWrapper && oldTab) {
+                                tabsWrapper.remove(oldTab);
+                            }
+                        }
+                        var checkTab = Ext.getCmp('smarttag-panel-tagcloud-tab-' + tagId);
+                        if (checkTab) {
+                            checkTab.setTitle(response.a.result.object.tag);
+                            if (response.a.result.object.merged) {
+                                Ext.getCmp('smarttag-grid-tagresources-' + tagId).refresh();
+                            }
+                        }
+                        this.config.record.tag = response.a.result.object.tag;
                     },
                     scope: this
                 }
