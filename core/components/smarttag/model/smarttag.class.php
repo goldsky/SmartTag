@@ -530,4 +530,22 @@ class SmartTag {
         return $output;
     }
 
+    /**
+     * Adding new tag into database
+     * @param   string  $tag    new tag
+     * @return  object  smarttagTags object
+     */
+    public function addTag($tag) {
+        $tag = trim(strtolower($tag));
+        $tagObj = $this->modx->getObject('smarttagTags', array(
+            'tag:LIKE' => $tag
+        ));
+        if ($tagObj) {
+            return $tagObj;
+        }
+        $tagObj = $this->modx->newObject('smarttagTags');
+        $tagObj->set('tag', $tag);
+        $tagObj->save();
+        return $tagObj;
+    }
 }

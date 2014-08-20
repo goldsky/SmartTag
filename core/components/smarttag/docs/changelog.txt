@@ -1,5 +1,6 @@
 SmartTag 1.0.0-dev
 ==============================================
+- [#4] Feature Request: Import CSV list of new tags to the database
 - [#13] Prevent characters that do not meet URL rules using MODX's "friendly_alias_restrict_chars_pattern" setting
 - [#6] Right click on tag grid to view resource on front end
 - [#12] Rename Tag dialogue box should pre-populate the field with the old name

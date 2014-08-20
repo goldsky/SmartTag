@@ -36,7 +36,11 @@ class SmartTagCmpHomeManagerController extends SmartTagManagerController {
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/window.tag.js');
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/grid.tagresources.js');
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/combo.tvs.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.converter.js');
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.tools.js');
+        $this->addCSS($this->smarttag->config['jsUrl'] . 'ux/fileuploadfield/css/fileuploadfield.css');
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'ux/fileuploadfield/FileUploadField.js');
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.csvimporter.js');
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.converter.js');
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.tagcloud.js');
         $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.home.js');
         $this->addLastJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/sections/index.js');

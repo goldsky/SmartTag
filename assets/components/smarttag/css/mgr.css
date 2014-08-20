@@ -10,6 +10,7 @@
     margin: 5px 5px 0 0;
 }
 
-#smarttag-converter-hbox .x-btn {
+#smarttag-converter-hbox .x-btn,
+#smarttag-csvimporter-hbox .x-btn {
     position: absolute !important;
 }

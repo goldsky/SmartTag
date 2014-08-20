@@ -1,13 +1,9 @@
-SmartTag.page.Converter = function(config) {
+SmartTag.panel.Converter = function(config) {
     config = config || {};
 
     Ext.applyIf(config, {
-        id: 'smarttag-page-converter',
+        id: 'smarttag-panel-converter',
         baseCls: 'modx-formpanel',
-        bodyStyle: 'min-height: 500px; overflow-y: scroll;',
-        preventRender: true,
-        defaults: {
-        },
         items: [
             {
                 html: '<h2>' + _('smarttag.converter') + '</h2><p>' + _('smarttag.converter_desc') + '</p>',
@@ -61,21 +57,12 @@ SmartTag.page.Converter = function(config) {
                     }
                 ]
             }
-        ],
-        listeners: {
-            beforerender: {
-                fn: function(panel) {
-                    var homeCenter = Ext.getCmp('smarttag-panel-home-center');
-                    panel.height = homeCenter.lastSize.height;
-                },
-                scope: this
-            }
-        }
+        ]
     });
 
-    SmartTag.page.Converter.superclass.constructor.call(this, config);
+    SmartTag.panel.Converter.superclass.constructor.call(this, config);
 };
-Ext.extend(SmartTag.page.Converter, MODx.Panel, {
+Ext.extend(SmartTag.panel.Converter, MODx.Panel, {
     toggleButton: function(type) {
         if (type === 'smarttag') {
             Ext.getCmp('smarttag-convert-button-to-smarttag').disable();
@@ -103,7 +90,7 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
     },
     convertToSmartTag: function(btn, e) {
         var comboBox = Ext.getCmp('smarttag-combo-tvs');
-        var _this = Ext.getCmp('smarttag-page-converter');
+        var _this = Ext.getCmp('smarttag-panel-converter');
         _this.loadMask();
         MODx.Ajax.request({
             url: SmartTag.config.connectorUrl,
@@ -125,7 +112,7 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
     },
     convertToAutoTag: function(btn, e) {
         var comboBox = Ext.getCmp('smarttag-combo-tvs');
-        var _this = Ext.getCmp('smarttag-page-converter');
+        var _this = Ext.getCmp('smarttag-panel-converter');
         _this.loadMask();
         MODx.Ajax.request({
             url: SmartTag.config.connectorUrl,
@@ -147,7 +134,7 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
     },
     convertToTag: function(btn, e) {
         var comboBox = Ext.getCmp('smarttag-combo-tvs');
-        var _this = Ext.getCmp('smarttag-page-converter');
+        var _this = Ext.getCmp('smarttag-panel-converter');
         _this.loadMask();
         MODx.Ajax.request({
             url: SmartTag.config.connectorUrl,
@@ -173,7 +160,7 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
         console.info('limit, start', limit, start);
         
         var comboBox = Ext.getCmp('smarttag-combo-tvs');
-        var _this = Ext.getCmp('smarttag-page-converter');
+        var _this = Ext.getCmp('smarttag-panel-converter');
         _this.loadMask();
         MODx.Ajax.request({
             url: SmartTag.config.connectorUrl,
@@ -203,4 +190,4 @@ Ext.extend(SmartTag.page.Converter, MODx.Panel, {
         });
     }
 });
-Ext.reg('smarttag-page-converter', SmartTag.page.Converter);
+Ext.reg('smarttag-panel-converter', SmartTag.panel.Converter);

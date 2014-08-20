@@ -42,11 +42,7 @@ SmartTag.panel.Home = function(config) {
                             }, {
                                 xtype: 'toolbar',
                                 id: 'smarttag-top-nav',
-                                title: '',
-                                columns: 2,
-                                defaults: {
-                                    scale: 'small'
-                                },
+                                bodyStyle: 'background-color: transparent;',
                                 items: [
                                     {
                                         text: _('smarttag.tagcloud'),
@@ -59,11 +55,11 @@ SmartTag.panel.Home = function(config) {
                                             }
                                         }
                                     }, {
-                                        text: _('smarttag.converter'),
+                                        text: _('smarttag.tools'),
                                         listeners: {
                                             'click': {
                                                 fn: function() {
-                                                    return this.openPage('converter');
+                                                    return this.openPage('tools');
                                                 },
                                                 scope: this
                                             }
