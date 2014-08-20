@@ -28,7 +28,8 @@ if ($modx = & $object->xpdo) {
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         case xPDOTransport::ACTION_INSTALL:
             $modelPath = $modx->getOption('core_path') . 'components/smarttag/model/';
-            $modx->addPackage('smarttag', $modelPath, 'modx_smarttag_');
+            $tablePrefix = $modx->getOption('smarttag.table_prefix', null, $modx->config[modX::OPT_TABLE_PREFIX] . 'smarttag_');
+            $modx->addPackage('smarttag', $modelPath, $tablePrefix);
             $manager = $modx->getManager();
             if (!$manager->createObjectContainer('smarttagTagresources')) {
                 $modx->log(modX::LOG_LEVEL_ERROR, '[SmartTag] `modx_smarttag_tagresources` table was unable to be created');

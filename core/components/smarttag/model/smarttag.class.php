@@ -25,7 +25,7 @@
 class SmartTag {
 
     const VERSION = '1.0.0';
-    const RELEASE = 'beta6';
+    const RELEASE = 'rc1';
 
     /**
      * modX object
