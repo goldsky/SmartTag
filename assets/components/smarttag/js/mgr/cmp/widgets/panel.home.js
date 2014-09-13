@@ -1,6 +1,31 @@
 SmartTag.panel.Home = function(config) {
     config = config || {};
 
+    var btns = [];
+    btns.push({
+        text: _('smarttag.tagcloud'),
+        listeners: {
+            'click': {
+                fn: function() {
+                    return this.openPage('tagcloud');
+                },
+                scope: this
+            }
+        }
+    });
+    if (MODx.perm["smarttag.tools_page"]) {
+        btns.push({
+            text: _('smarttag.tools'),
+            listeners: {
+                'click': {
+                    fn: function() {
+                        return this.openPage('tools');
+                    },
+                    scope: this
+                }
+            }
+        });
+    }
     Ext.applyIf(config, {
         id: 'smarttag-panel-home',
         baseCls: 'modx-formpanel',
@@ -43,29 +68,7 @@ SmartTag.panel.Home = function(config) {
                                 xtype: 'toolbar',
                                 id: 'smarttag-top-nav',
                                 bodyStyle: 'background-color: transparent;',
-                                items: [
-                                    {
-                                        text: _('smarttag.tagcloud'),
-                                        listeners: {
-                                            'click': {
-                                                fn: function() {
-                                                    return this.openPage('tagcloud');
-                                                },
-                                                scope: this
-                                            }
-                                        }
-                                    }, {
-                                        text: _('smarttag.tools'),
-                                        listeners: {
-                                            'click': {
-                                                fn: function() {
-                                                    return this.openPage('tools');
-                                                },
-                                                scope: this
-                                            }
-                                        }
-                                    }
-                                ]
+                                items: btns
                             }
                         ]
                     }

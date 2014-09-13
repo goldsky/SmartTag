@@ -197,6 +197,56 @@ $elementsAttribute = array(
         ),
     )
 );
+
+/**
+ * ACCESS POLICY
+ */
+$attributes = array(
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UNIQUE_KEY => array('name'),
+    xPDOTransport::UPDATE_OBJECT => true,
+);
+$policies = include $sources['data'] . 'transport.policies.php';
+if (!is_array($policies)) {
+    $modx->log(modX::LOG_LEVEL_FATAL, 'Adding policies failed.');
+}
+foreach ($policies as $policy) {
+    $vehicle = $builder->createVehicle($policy, $attributes);
+    $builder->putVehicle($vehicle);
+}
+$modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($policies) . ' Access Policies.');
+flush();
+unset($policies, $policy, $attributes);
+
+/**
+ * ACCESS POLICY TEMPLATE
+ */
+$templates = include dirname(__FILE__) . '/data/transport.policytemplates.php';
+$attributes = array(
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UNIQUE_KEY => array('name'),
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::RELATED_OBJECTS => true,
+    xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array(
+        'Permissions' => array(
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => true,
+            xPDOTransport::UNIQUE_KEY => array('template', 'name'),
+        ),
+    )
+);
+if (is_array($templates)) {
+    foreach ($templates as $template) {
+        $vehicle = $builder->createVehicle($template, $attributes);
+        $builder->putVehicle($vehicle);
+    }
+    $modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($templates) . ' Access Policy Templates.');
+    flush();
+} else {
+    $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in Access Policy Templates.');
+}
+unset($templates, $template, $idx, $ct, $attributes);
+
 $elementsVehicle = $builder->createVehicle($category, $elementsAttribute);
 
 /**

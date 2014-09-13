@@ -1,5 +1,6 @@
 SmartTag 1.0.0
 ==============================================
+- [#7] Add permission to access Tools page
 - [#14] FR: New input TV type to only select one tag
 - [#18] fix patterned cleaner
 

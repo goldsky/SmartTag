@@ -64,6 +64,7 @@ class SmartTagCmpHomeManagerController extends SmartTagManagerController {
         $this->addHtml('<script type="text/javascript">
         Ext.onReady(function() {
             MODx.load({xtype: "smarttag-page-home"});
+            MODx.perm["smarttag.tools_page"] = ' . ($this->modx->hasPermission('smarttag.tools_page') ? 1 : 0) . ';
         });
         </script>');
     }
