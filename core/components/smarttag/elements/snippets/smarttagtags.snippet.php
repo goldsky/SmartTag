@@ -24,8 +24,20 @@
  */
 $docIds = $modx->getOption('docIds', $scriptProperties);
 if (!empty($docIds)) {
-    $docIds = array_map('trim', explode(',', $docIds));
+    $docIds = array_map('trim', @explode(',', $docIds));
 }
+$parentIds = $modx->getOption('parentIds', $scriptProperties);
+if (!empty($parentIds)) {
+    $parentIds = array_map('trim', @explode(',', $parentIds));
+}
+$includeHiddenDocs = $modx->getOption('includeHiddenDocs', $scriptProperties);
+
+// to prevent empty inputs from above properties where meant to be existed
+$allTags = $modx->getOption('allTags', $scriptProperties);
+if (empty($docIds) && empty($parentIds) && empty($allTags)) {
+    return;
+}
+
 $includeEmptyTags = intval($modx->getOption('includeEmptyTags', $scriptProperties));
 $limit = intval($modx->getOption('limit', $scriptProperties, 10));
 $sort = $modx->getOption('sort', $scriptProperties, 'count desc,tag asc');
@@ -45,14 +57,35 @@ $c->select(array(
     'smarttagTags.*',
     'count' => "(" .
     "SELECT COUNT(*) FROM {$modx->getTableName('smarttagTagresources')} AS smarttagTagresources " .
+    (!empty($docIds) || !empty($parentIds) ? "LEFT JOIN {$modx->getTableName('modResource')} as modResource ON modResource.id = smarttagTagresources.resource_id " : '' ) .
     "WHERE (smarttagTagresources.tag_id = smarttagTags.id " .
-    (!empty($docIds) ? "AND smarttagTagresources.resource_id IN (" . @implode(',', $docIds) . ")" : '') .
+    (!empty($docIds) ? "AND smarttagTagresources.resource_id IN (" . @implode(',', $docIds) . ") " : '') .
+    (!empty($parentIds) ? "AND modResource.parent IN (" . @implode(',', $parentIds) . ") " : '') .
+    (!empty($parentIds) || !empty($parentIds) ? "AND modResource.published = 1 AND modResource.deleted != 1 " : '') .
+    (empty($includeHiddenDocs) ? "AND modResource.hidemenu != 1 " : '') .
     ")) ",
 ));
-if (!empty($docIds)) {
+if (!empty($docIds) || !empty($parentIds)) {
     $c->leftJoin('smarttagTagresources', 'Tagresources', 'Tagresources.tag_id=smarttagTags.id');
+    $c->leftJoin('modResource', 'Resource', 'Tagresources.resource_id=Resource.id');
+    $c->where(array(
+        'Resource.published:=' => 1,
+        'Resource.deleted:!=' => 1,
+    ));
+    if (empty($includeHiddenDocs)) {
+        $c->where(array(
+            'Resource.hidemenu:!=' => 1,
+        ));
+    }
+}
+if (!empty($docIds)) {
     $c->where(array(
         'Tagresources.resource_id:IN' => $docIds
+    ));
+}
+if (!empty($parentIds)) {
+    $c->where(array(
+        'Resource.parent:IN' => $parentIds
     ));
 }
 $sorts = @explode(',', $sort);

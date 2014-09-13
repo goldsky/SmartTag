@@ -29,3 +29,5 @@ $_lang['smarttag.tplWrapper'] = 'Name of chunk for wrapper template of the outpu
 $_lang['smarttag.tplItem'] = 'Name of chunk for item template of the output. @BINDING enabled (eg: @FILE:[path/to/file.tpl])';
 $_lang['smarttag.phsPrefix'] = 'Prefix for the placeholders';
 $_lang['smarttag.docIds'] = 'Comma delimited values of Documents\' IDs';
+$_lang['smarttag.parentIds'] = 'Comma delimited values of Parent Documents\' IDs';
+$_lang['smarttag.includeHiddenDocs'] = 'Include tags on hidden resources';
