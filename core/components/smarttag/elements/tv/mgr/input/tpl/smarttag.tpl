@@ -68,10 +68,41 @@ Ext.onReady(function() {
             'select': {fn:MODx.fireResourceFormChange, scope:this}
             ,'beforeadditem': {fn:MODx.fireResourceFormChange, scope:this}
             ,'newitem': {fn:function(bs,v,f) {
-                v = v.replace(MODx.config.friendly_alias_restrict_chars_pattern, '').toLowerCase()
-                bs.addNewItem({"id": v,"tag": v});
-                MODx.fireResourceFormChange();
-                return true;
+                if (!SmartTag.loadNewItemMask){
+                    var domHandler = bs.outerWrapEl.dom;
+                    SmartTag.loadNewItemMask = new Ext.LoadMask(domHandler, {
+                        msg: _('cleaningup')
+                    });
+                }
+                SmartTag.loadNewItemMask.show();
+                return MODx.Ajax.request({
+                    url: SmartTag.config.connectorUrl
+                    ,params: {
+                        action: 'mgr/tags/filter'
+                        ,tag: v
+                    }
+                    ,listeners: {
+                        success: {
+                            fn: function(response){
+                                if (response.success) {
+                                    v = response.object.filtered;
+                                    bs.addNewItem({"id": v,"tag": v});
+                                    MODx.fireResourceFormChange();
+                                    if (SmartTag.loadNewItemMask) {
+                                        SmartTag.loadNewItemMask.hide();
+                                    }
+                                }
+                            },scope: this
+                        }
+                        ,failure:{
+                            fn: function(response){
+                                if (SmartTag.loadNewItemMask) {
+                                    SmartTag.loadNewItemMask.hide();
+                                }
+                            },scope: this
+                        }
+                    }
+                });
             },scope:this}
             ,'beforeremoveitem': {fn:MODx.fireResourceFormChange, scope:this}
             ,'clear': {fn:MODx.fireResourceFormChange, scope:this}

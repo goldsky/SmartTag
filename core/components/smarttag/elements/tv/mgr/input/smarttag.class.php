@@ -28,14 +28,26 @@ if (!class_exists('SmartTagInputRender')) {
 
         public function __construct(modTemplateVar $tv, array $config = array()) {
             parent::__construct($tv, $config);
+
+            $defaultSmartTagCorePath = $this->modx->getOption('core_path') . 'components/smarttag/';
+            $smarttagCorePath = $this->modx->getOption('smarttag.core_path', null, $defaultSmartTagCorePath);
+            $smarttag = $this->modx->getService('smarttag', 'SmartTag', $smarttagCorePath . 'model/');
+
+            if (!($smarttag instanceof SmartTag)) {
+                return;
+            }
+
+            $version = str_replace(' ', '', $smarttag->config['version']);
+            $isJsCompressed = $this->modx->getOption('compress_js');
+            $withVersion = $isJsCompressed ? '' : '?v=' . $version;
+
             $assetsUrl = $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/smarttag/';
-            $this->modx->controller->addJavascript($assetsUrl . 'js/mgr/smarttag.js');
+            $this->modx->controller->addJavascript($assetsUrl . 'js/mgr/smarttag.js' . $withVersion);
             $connectorUrl = $assetsUrl . 'conn/mgr.php';
             $this->modx->controller->addHTML('
         <script type="text/javascript">
         // <![CDATA[
         SmartTag.config.connectorUrl = "' . $connectorUrl . '";
-        MODx.config.friendly_alias_restrict_chars_pattern = ' . $this->modx->getOption('friendly_alias_restrict_chars_pattern') . ';
         // ]]>
         </script>');
         }
@@ -59,7 +71,7 @@ if (!class_exists('SmartTagInputRender')) {
          * @return array
          */
         public function getLexiconTopics() {
-            return array('tv_widget','smarttag:default');
+            return array('tv_widget', 'smarttag:default');
         }
 
     }

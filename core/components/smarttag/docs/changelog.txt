@@ -1,3 +1,7 @@
+SmartTag 1.0.0
+==============================================
+- [#18] fix patterned cleaner
+
 SmartTag 1.0.0-rc1 (Aug 20, 2014)
 ==============================================
 - [#15] When creating the table, custom table prefix is not respected
