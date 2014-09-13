@@ -64,12 +64,16 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
     public function prepareRow(xPDOObject $object) {
         $objectArray = $object->toArray();
         
-        $values = array_map('trim', @explode('||', $objectArray['value']));
+        $value = $objectArray['value'];
+        $value = str_replace(',', '||', $value);
+        $values = array_map('trim', @explode('||', $value));
         if (!empty($values)) {
+            $valuesArray = array();
             foreach ($values as $value) {
                 if (empty($value)) {
                     continue;
                 }
+                $valuesArray[] = $value;
                 $tag = $this->modx->getObject('smarttagTags', array(
                     'tag' => $value
                 ));
@@ -95,6 +99,15 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
                         continue;
                     }
                     $this->_count++;
+                }
+            }
+            if (!empty($valuesArray)) {
+                $newValue = @implode('||', $valuesArray);
+                if ($objectArray['value'] !== $newValue) {
+                    $object->set('value', $newValue);
+                    if ($object->save()) {
+                        $objectArray['value'] = $newValue;
+                    }
                 }
             }
         }        
