@@ -38,9 +38,9 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
      */
     public function prepareQueryBeforeCount(xPDOQuery $c) {
         $props = $this->getProperties();
-        $valuesqry = false;
         
         $c->distinct();
+        // from combobox
         if (isset($props['valuesqry'])) {
             if ($props['valuesqry'] === 'true') {
                 if (isset($props['query'])) {
@@ -57,14 +57,20 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
                     }
                 }
             } else {
-                if (isset($props['query'])) {
-                    if (!empty($props['query'])) {
-                        $c->where(array(
-                            'tag:LIKE' => "{$props['query']}%",
-                            'OR:tag:LIKE' => "% {$props['query']}%",
-                        ));
-                    }
+                if (isset($props['query']) && !empty($props['query'])) {
+                    $c->where(array(
+                        'tag:LIKE' => "{$props['query']}%",
+                        'OR:tag:LIKE' => "% {$props['query']}%",
+                    ));
                 }
+            }
+        }
+        // from textfield
+        else {
+            if (isset($props['query']) && !empty($props['query'])) {
+                $c->where(array(
+                    'tag:LIKE' => "%{$props['query']}%",
+                ));
             }
         }
         
