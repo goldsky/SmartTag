@@ -63,6 +63,7 @@ Ext.onReady(function() {
         ,forceSelection: false
         ,stackItems: {if $params.stackItems && $params.stackItems != 'false'}true{else}false{/if}
         ,msgTarget: 'under'
+        ,singleMode: {if $params.singleMode && $params.singleMode != 'false'}true{else}false{/if}
         {literal}
         ,listeners: {
             'select': {fn:MODx.fireResourceFormChange, scope:this}
@@ -85,6 +86,10 @@ Ext.onReady(function() {
                         success: {
                             fn: function(response){
                                 if (response.success) {
+                                    var _this = fld{/literal}{$tv->id}{literal};
+                                    if (_this.singleMode) {
+                                        _this.removeAllItems();
+                                    }
                                     v = response.object.filtered;
                                     bs.addNewItem({"id": v,"tag": v});
                                     MODx.fireResourceFormChange();

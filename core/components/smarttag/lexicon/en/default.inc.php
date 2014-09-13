@@ -22,10 +22,13 @@
  * @package smarttag
  * @subpackage i18n
  */
+$_lang['setting_smarttag.limit'] = 'Tag list limit';
+$_lang['setting_smarttag.limit_desc'] = 'Query limit of the tag list in Custom Manager Page (CMP). The default is 50.';
+
 $_lang['smarttag'] = 'SmartTag';
 $_lang['smarttag_desc'] = 'Tags Database';
 $_lang['smarttag.href'] = 'href';
 $_lang['smarttag.queryLimit'] = 'Query limit';
 $_lang['smarttag.queryLimit_desc'] = 'Query limit of the processor. The default is 20.';
-$_lang['setting_smarttag.limit'] = 'Tag list limit';
-$_lang['setting_smarttag.limit_desc'] = 'Query limit of the tag list in Custom Manager Page (CMP). The default is 50.';
+$_lang['smarttag.combo_singlemode'] = 'Single Mode';
+$_lang['smarttag.combo_singlemode_desc'] = 'When set to Yes, it will only allow one value. Defaults to No which allows multiple values.';

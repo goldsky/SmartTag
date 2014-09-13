@@ -23,5 +23,4 @@
  * @subpackage tv
  */
 
-
 return $modx->controller->fetchTemplate($modx->getOption('core_path') . 'components/smarttag/elements/tv/mgr/inputproperties/tpl/smarttag.tpl');

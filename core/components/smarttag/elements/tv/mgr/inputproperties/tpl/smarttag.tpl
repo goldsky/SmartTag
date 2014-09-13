@@ -131,6 +131,21 @@ MODx.load({
         ,forId: 'inopt_stackItems{/literal}{$tv}{literal}'
         ,html: _('combo_stackitems_desc')
         ,cls: 'desc-under'
+    },{
+        xtype: 'combo-boolean'
+        ,fieldLabel: _('smarttag.combo_singlemode') || 'singleMode'
+        ,description: MODx.expandHelp ? '' : _('smarttag.combo_singlemode_desc')
+        ,name: 'inopt_singleMode'
+        ,hiddenName: 'inopt_singleMode'
+        ,id: 'inopt_singleMode{/literal}{$tv}{literal}'
+        ,value: params['singleMode'] || false
+        ,width: 200
+        ,listeners: oc
+    },{
+        xtype: MODx.expandHelp ? 'label' : 'hidden'
+        ,forId: 'inopt_stackItems{/literal}{$tv}{literal}'
+        ,html: _('smarttag.combo_singlemode_desc')
+        ,cls: 'desc-under'
     }]
     ,renderTo: 'tv-input-properties-form{/literal}{$tv}{literal}'
 });
