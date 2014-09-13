@@ -33,17 +33,34 @@ class SmartTagCmpHomeManagerController extends SmartTagManagerController {
     }
 
     public function loadCustomCssJs() {
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/window.tag.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/grid.tagresources.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/combo.tvs.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.tools.js');
-        $this->addCSS($this->smarttag->config['jsUrl'] . 'ux/fileuploadfield/css/fileuploadfield.css');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'ux/fileuploadfield/FileUploadField.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.csvimporter.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.converter.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.tagcloud.js');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.home.js');
-        $this->addLastJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/sections/index.js');
+        $defaultSmartTagCorePath = $this->modx->getOption('core_path') . 'components/smarttag/';
+        $smarttagCorePath = $this->modx->getOption('smarttag.core_path', null, $defaultSmartTagCorePath);
+        $smarttag = $this->modx->getService('smarttag', 'SmartTag', $smarttagCorePath . 'model/');
+
+        if (!($smarttag instanceof SmartTag)) {
+            return;
+        }
+
+        $version = str_replace(' ', '', $smarttag->config['version']);
+
+        $isCssCompressed = $this->modx->getOption('compress_css');
+        $withVersion = $isCssCompressed ? '' : '?v=' . $version;
+
+        $this->addCSS($this->smarttag->config['jsUrl'] . 'ux/fileuploadfield/css/fileuploadfield.css' . $withVersion);
+
+        $isJsCompressed = $this->modx->getOption('compress_js');
+        $withVersion = $isJsCompressed ? '' : '?v=' . $version;
+
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/window.tag.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/grid.tagresources.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/combo.tvs.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.tools.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'ux/fileuploadfield/FileUploadField.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.csvimporter.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.converter.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/page.tagcloud.js' . $withVersion);
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/widgets/panel.home.js' . $withVersion);
+        $this->addLastJavascript($this->smarttag->config['jsUrl'] . 'mgr/cmp/sections/index.js' . $withVersion);
         $this->addHtml('<script type="text/javascript">
         Ext.onReady(function() {
             MODx.load({xtype: "smarttag-page-home"});
