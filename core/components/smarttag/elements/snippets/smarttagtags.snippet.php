@@ -77,6 +77,13 @@ if (!empty($docIds) || !empty($parentIds)) {
             'Resource.hidemenu:!=' => 1,
         ));
     }
+    if (!empty($tvNames)) {
+        $tvNames = @explode(',', $tvNames);
+        $c->leftJoin('modTemplateVar', 'TemplateVar', 'TemplateVar.id=Tagresources.tmplvar_id');
+        $c->where(array(
+            'TemplateVar.name:IN' => $tvNames,
+        ));
+    }
 }
 if (!empty($docIds)) {
     $c->where(array(
