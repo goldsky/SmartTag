@@ -252,6 +252,7 @@ $elementsVehicle = $builder->createVehicle($category, $elementsAttribute);
 /**
  * FILE RESOLVERS
  */
+$modx->log(modX::LOG_LEVEL_INFO, 'Adding in files...');
 $elementsVehicle->resolve('file', array(
     'source' => $sources['source_core'],
     'target' => "return MODX_CORE_PATH . 'components/';",
@@ -270,14 +271,15 @@ flush();
 $elementsVehicle->resolve('php', array(
     'source' => $sources['resolvers'] . 'tables.resolver.php',
 ));
-
+$elementsVehicle->resolve('php',array(
+    'source' => $sources['resolvers'] . 'policy.resolver.php',
+));
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding in PHP resolvers done.');
 
 $builder->putVehicle($elementsVehicle);
 unset($elementsVehicle);
 $modx->log(modX::LOG_LEVEL_INFO, 'Packaged in Elements done.');
 flush();
-
 
 /**
  * license file, readme and setup options
