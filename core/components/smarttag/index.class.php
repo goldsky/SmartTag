@@ -39,6 +39,7 @@ abstract class SmartTagManagerController extends modExtraManagerController {
         $this->addHtml('<script type="text/javascript">
         Ext.onReady(function() {
             SmartTag.config = ' . $this->modx->toJSON($configs) . ';
+            MODx.perm["smarttag.tools_page"] = ' . ($this->modx->hasPermission('smarttag.tools_page') ? 1 : 0) . ';
         });
         </script>');
 
