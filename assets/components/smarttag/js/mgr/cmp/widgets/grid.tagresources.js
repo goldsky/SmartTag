@@ -52,17 +52,26 @@ SmartTag.grid.TagResources = function(config) {
                 text: _('smarttag.delete_tag'),
                 handler: function() {
                     return this.deleteTag(config.record.tagId);
-                }
+                },
+                scope: this
             }, {
                 text: _('smarttag.rename_tag'),
                 handler: function() {
                     return this.renameTag(config.record.tagId);
-                }
+                },
+                scope: this
             }, {
                 text: _('smarttag.remove_tagresource'),
                 handler: function() {
                     return this.removeTagresources();
-                }
+                },
+                scope: this
+            }, {
+                text: _('smarttag.sync_this_tag'),
+                handler: function() {
+                    return this.sync(config.record.tagId);
+                },
+                scope: this
             }
         ]
     });
@@ -187,6 +196,28 @@ Ext.extend(SmartTag.grid.TagResources, MODx.grid.Grid, {
     },
     _renderPageTitle: function(v, md, rec) {
         return this.tplPageTitle.apply(rec.data);
+    },
+    sync: function(tagId) {
+        var grid = Ext.getCmp("smarttag-grid-tagresources-" + tagId);
+        var mask = new Ext.LoadMask(grid.getEl(), {
+            msg: _('smarttag.please_wait')
+        });
+        mask.show();
+        MODx.Ajax.request({
+            url: SmartTag.config.connectorUrl,
+            params: {
+                action: 'mgr/tags/sync',
+                id: tagId
+            },
+            listeners: {
+                'success': {
+                    fn: function() {
+                        grid.refresh();
+                        mask.hide();
+                    }
+                }
+            }
+        });
     }
 });
 Ext.reg('smarttag-grid-tagresources', SmartTag.grid.TagResources);

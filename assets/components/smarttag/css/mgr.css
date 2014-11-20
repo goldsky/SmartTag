@@ -14,3 +14,14 @@
 #smarttag-csvimporter-hbox .x-btn {
     position: absolute !important;
 }
+
+#smarttag-top-nav {
+    background-color: transparent;
+    border: none;
+}
+
+#smarttag_about {
+    font-size: 10px;
+    margin: 5px;
+    color: #bbbbbb;
+}

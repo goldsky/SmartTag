@@ -75,7 +75,7 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
                 }
                 $valuesArray[] = $value;
                 $tag = $this->modx->getObject('smarttagTags', array(
-                    'tag' => $value
+                    'tag:LIKE' => $value
                 ));
                 if (!$tag) {
                     $tag = $this->modx->newObject('smarttagTags');
@@ -101,6 +101,7 @@ class TVsSyncProcessor extends modObjectGetListProcessor {
                     $this->_count++;
                 }
             }
+            $valuesArray = array_unique($valuesArray);
             if (!empty($valuesArray)) {
                 $newValue = @implode('||', $valuesArray);
                 if ($objectArray['value'] !== $newValue) {

@@ -26,6 +26,24 @@ SmartTag.panel.Home = function(config) {
             }
         });
     }
+    btns.push('->', {
+        xtype: 'panel',
+        html: '<a href="javascript:void(0);" id="smarttag_about">' + _('smarttag.about') + '</a>',
+        border: false,
+        bodyStyle: 'font-size: 10px; margin: 5px; background-color: transparent;',
+        listeners: {
+            afterrender: function() {
+                Ext.get('smarttag_about').on('click', function() {
+                    var msg = '&copy; 2014, ';
+                    msg += '<a href="http://www.virtudraft.com" target="_blank">';
+                    msg += 'www.virtudraft.com';
+                    msg += '</a><br/>';
+                    msg += 'License GPL v3';
+                    Ext.MessageBox.alert('SmartTag', msg);
+                });
+            }
+        }
+    });
     Ext.applyIf(config, {
         id: 'smarttag-panel-home',
         baseCls: 'modx-formpanel',
@@ -47,11 +65,13 @@ SmartTag.panel.Home = function(config) {
                     border: false,
                     autoHeight: true
                 },
-                bodyStyle: 'padding: 5px;',
+                border: false,
+                bodyStyle: 'padding: 5px; background-color: transparent;',
                 items: [
                     {
                         layout: 'hbox',
                         border: false,
+                        bodyStyle: 'background-color: transparent;',
                         defaults: {
                             border: false
                         },
@@ -83,24 +103,6 @@ SmartTag.panel.Home = function(config) {
                         xtype: 'smarttag-page-tagcloud'
                     }
                 ]
-            }, {
-                region: 'south',
-                id: 'smarttag-panel-home-south',
-                html: '<a href="javascript:void(0);" style="color: #bbbbbb;" id="smarttag_about">' + _('smarttag.about') + '</a>',
-                border: false,
-                bodyStyle: 'font-size: 10px; margin: 5px;',
-                listeners: {
-                    afterrender: function() {
-                        Ext.get('smarttag_about').on('click', function() {
-                            var msg = '&copy; 2014, ';
-                            msg += '<a href="http://www.virtudraft.com" target="_blank">';
-                            msg += 'www.virtudraft.com';
-                            msg += '</a><br/>';
-                            msg += 'License GPL v3';
-                            Ext.MessageBox.alert('SmartTag', msg);
-                        });
-                    }
-                }
             }
         ],
         listeners: {
@@ -115,6 +117,7 @@ SmartTag.panel.Home = function(config) {
         }
     });
 
+    SmartTag.panel.Home.superclass.constructor.call(this, config);
     /**
      * @todo: relayouting
      */
@@ -134,7 +137,6 @@ SmartTag.panel.Home = function(config) {
             _this.doLayout();
         });
     }
-    SmartTag.panel.Home.superclass.constructor.call(this, config);
 };
 Ext.extend(SmartTag.panel.Home, MODx.Panel, {
     openPage: function(page) {

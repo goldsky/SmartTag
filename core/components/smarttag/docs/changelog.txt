@@ -1,3 +1,8 @@
+SmartTag 1.0.0-pl (November 20, 2014)
+==============================================
+- add array_unique in sync processor
+- add sync single tag from resources
+
 SmartTag 1.0.0-rc2 (September 25, 2014)
 ==============================================
 - Add &tvNames on smarttagTags snippet to limit the defined TV

@@ -13,7 +13,7 @@ SmartTag.panel.CSVImporter = function(config) {
                 bodyStyle: 'margin-bottom: 15px;'
             }, {
                 layout: 'hbox',
-                bodyStyle: 'background-color: transparent;',
+                bodyStyle: 'padding: 10px; background-color: transparent;',
                 id: 'smarttag-csvimporter-hbox',
                 border: false,
                 items: [

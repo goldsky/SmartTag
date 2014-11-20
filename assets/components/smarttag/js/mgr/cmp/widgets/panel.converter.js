@@ -13,7 +13,7 @@ SmartTag.panel.Converter = function(config) {
             }, {
                 layout: 'hbox',
                 id: 'smarttag-converter-hbox',
-                bodyStyle: 'background-color: transparent;',
+                bodyStyle: 'padding: 10px; background-color: transparent;',
                 border: false,
                 items: [
                     {
@@ -48,7 +48,7 @@ SmartTag.panel.Converter = function(config) {
                     }, {
                         xtype: 'button',
                         id: 'smarttag-convert-button-sync',
-                        text: _('smarttag.sync'),
+                        text: _('smarttag.sync_existing_tags'),
                         disabled: true,
                         handler: function(){
                             this.syncTags();
@@ -86,7 +86,9 @@ Ext.extend(SmartTag.panel.Converter, MODx.Panel, {
         this.loadConverterMask.show();
     },
     hideMask: function() {
-        this.loadConverterMask.hide();
+        if (this.loadConverterMask) {
+            this.loadConverterMask.hide();
+        }
     },
     convertToSmartTag: function(btn, e) {
         var comboBox = Ext.getCmp('smarttag-combo-tvs');

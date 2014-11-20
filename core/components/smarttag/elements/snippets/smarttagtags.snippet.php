@@ -39,6 +39,7 @@ if (empty($docIds) && empty($parentIds) && empty($allTags)) {
 }
 
 $includeEmptyTags = intval($modx->getOption('includeEmptyTags', $scriptProperties));
+$tvNames = $modx->getOption('tvNames', $scriptProperties);
 $limit = intval($modx->getOption('limit', $scriptProperties, 10));
 $sort = $modx->getOption('sort', $scriptProperties, 'count desc,tag asc');
 $tplWrapper = $modx->getOption('tplWrapper', $scriptProperties, 'smarttagtags.wrapper');
