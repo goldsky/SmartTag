@@ -33,15 +33,7 @@ class SmartTagCmpHomeManagerController extends SmartTagManagerController {
     }
 
     public function loadCustomCssJs() {
-        $defaultSmartTagCorePath = $this->modx->getOption('core_path') . 'components/smarttag/';
-        $smarttagCorePath = $this->modx->getOption('smarttag.core_path', null, $defaultSmartTagCorePath);
-        $smarttag = $this->modx->getService('smarttag', 'SmartTag', $smarttagCorePath . 'model/');
-
-        if (!($smarttag instanceof SmartTag)) {
-            return;
-        }
-
-        $version = str_replace(' ', '', $smarttag->config['version']);
+        $version = str_replace(' ', '', $this->smarttag->config['version']);
 
         $isCssCompressed = $this->modx->getOption('compress_css');
         $withVersion = $isCssCompressed ? '' : '?v=' . $version;

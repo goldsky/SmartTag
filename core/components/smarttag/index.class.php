@@ -32,8 +32,17 @@ abstract class SmartTagManagerController extends modExtraManagerController {
     public function initialize() {
         $this->smarttag = new SmartTag($this->modx);
 
-        $this->addCss($this->smarttag->config['cssUrl'] . 'mgr.css');
-        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/smarttag.js');
+        $version = str_replace(' ', '', $this->smarttag->config['version']);
+
+        $isCssCompressed = $this->modx->getOption('compress_css');
+        $withVersion = $isCssCompressed ? '' : '?v=' . $version;
+        
+        $this->addCss($this->smarttag->config['cssUrl'] . 'mgr.css' . $withVersion);
+        
+        $isJsCompressed = $this->modx->getOption('compress_js');
+        $withVersion = $isJsCompressed ? '' : '?v=' . $version;
+
+        $this->addJavascript($this->smarttag->config['jsUrl'] . 'mgr/smarttag.js' . $withVersion);
         $limit = $this->modx->getOption('smarttag.limit', '', 50);
         $configs = array_merge($this->smarttag->config, array('limit' => $limit));
         $this->addHtml('<script type="text/javascript">
