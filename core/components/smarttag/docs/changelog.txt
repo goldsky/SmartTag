@@ -1,3 +1,7 @@
+SmartTag 1.0.1-pl (December 24, 2014)
+==============================================
+- [#21] Changing name of tag makes it not show up in the TV field
+
 SmartTag 1.0.0-pl (November 20, 2014)
 ==============================================
 - add array_unique in sync processor

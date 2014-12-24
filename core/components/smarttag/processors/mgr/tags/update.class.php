@@ -52,7 +52,7 @@ class TagsUpdateProcessor extends modObjectUpdateProcessor {
      * Override in your derivative class to do functionality before save() is run
      * @return boolean
      */
-    public function beforeSave() {
+    public function beforeSet() {
         if ($this->merged) {
             $smarttagTagresources = $this->merged->getMany('Tagresources');
             if ($smarttagTagresources) {
