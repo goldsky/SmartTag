@@ -69,6 +69,10 @@ Ext.onReady(function() {
             'select': {fn:MODx.fireResourceFormChange, scope:this}
             ,'beforeadditem': {fn:MODx.fireResourceFormChange, scope:this}
             ,'newitem': {fn:function(bs,v,f) {
+                if (!SmartTag.config.useFilter) {
+                    bs.addNewItem({"id": v,"tag": v});
+                    return true;
+                }
                 if (!SmartTag.loadNewItemMask){
                     var domHandler = bs.outerWrapEl.dom;
                     SmartTag.loadNewItemMask = new Ext.LoadMask(domHandler, {
@@ -113,7 +117,7 @@ Ext.onReady(function() {
             ,'clear': {fn:MODx.fireResourceFormChange, scope:this}
         }
     });
-    
+
     Ext.getCmp('modx-panel-resource').getForm().add(fld{/literal}{$tv->id}{literal});
 });
 {/literal}

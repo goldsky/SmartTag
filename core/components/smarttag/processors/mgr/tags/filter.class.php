@@ -3,7 +3,7 @@
 /**
  * SmartTag
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2015 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of SmartTag, a MODX's custom Template Variable for tagging
  *
@@ -23,16 +23,22 @@
  * @subpackage processor
  */
 class TagsFilterProcessor extends modProcessor {
-    
+
     public function process() {
         $tag = $this->getProperty('tag');
-        // replace space with temporary delimiter to avoid alias cleaner
-        $time = time();
-        $filteredTag = preg_replace('/\s+/u', $time, $tag);
-        if (empty($this->modx->resource)) $this->modx->getService('resource','modResource');
-        // lend resource's method
-        $filteredTag = $this->modx->resource->cleanAlias($filteredTag);
-        $filteredTag = preg_replace("/$time+/u", ' ', $filteredTag);
+        $useFilter = $this->modx->getOption('smarttag.use_filter', null, false);
+        if ($useFilter) {
+            // replace space with temporary delimiter to avoid alias cleaner
+            $time = time();
+            $filteredTag = preg_replace('/\s+/u', $time, $tag);
+            if (empty($this->modx->resource)) $this->modx->getService('resource','modResource');
+            // lend resource's method
+            $filteredTag = $this->modx->resource->cleanAlias($filteredTag);
+            $filteredTag = preg_replace("/($time)+/u", ' ', $filteredTag);
+        } else {
+            $filteredTag = $tag;
+        }
+
         return $this->success('', array('tag' => $tag, 'filtered' => $filteredTag));
     }
 }

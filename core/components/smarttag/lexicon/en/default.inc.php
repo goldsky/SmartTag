@@ -24,6 +24,8 @@
  */
 $_lang['setting_smarttag.limit'] = 'Tag list limit';
 $_lang['setting_smarttag.limit_desc'] = 'Query limit of the tag list in Custom Manager Page (CMP). The default is 50.';
+$_lang['setting_smarttag.use_filter'] = 'Use filter';
+$_lang['setting_smarttag.use_filter_desc'] = 'Enable clean alias filter to the applied tags. The default is yes.';
 
 $_lang['smarttag'] = 'SmartTag';
 $_lang['smarttag_desc'] = 'Tags Database';

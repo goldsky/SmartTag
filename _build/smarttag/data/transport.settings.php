@@ -3,7 +3,7 @@
 /**
  * SmartTag
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2015 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of SmartTag, a MODX's custom Template Variable for tagging
  *
@@ -28,11 +28,22 @@
  * @param   string  $filename   filename
  * @return  string  file content
  */
+$settings = array();
+
 $settings['smarttag.limit'] = $modx->newObject('modSystemSetting');
 $settings['smarttag.limit']->fromArray(array(
     'key' => 'smarttag.limit',
     'value' => 50,
     'xtype' => 'textfield',
+    'namespace' => 'smarttag',
+    'area' => '',
+        ), '', true, true);
+
+$settings['smarttag.use_filter'] = $modx->newObject('modSystemSetting');
+$settings['smarttag.use_filter']->fromArray(array(
+    'key' => 'smarttag.use_filter',
+    'value' => 1,
+    'xtype' => 'combo-boolean',
     'namespace' => 'smarttag',
     'area' => '',
         ), '', true, true);

@@ -1,5 +1,6 @@
 SmartTag dev
 ==============================================
+- [#24][#22] add option to ignore character's filter
 - [#23] fix renaming a tag with a LIKE (capital ignored) name which deletes it from the database
 - [#21] Changing name of tag makes it not show up in the TV field
 

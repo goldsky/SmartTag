@@ -3,7 +3,7 @@
 /**
  * SmartTag
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2015 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of SmartTag, a MODX's custom Template Variable for tagging
  *
@@ -48,6 +48,7 @@ if (!class_exists('SmartTagInputRender')) {
         <script type="text/javascript">
         // <![CDATA[
         SmartTag.config.connectorUrl = "' . $connectorUrl . '";
+        SmartTag.config.useFilter = ' . ((int) $this->modx->getOption('smarttag.use_filter', null, false) === 0 ? 0 : 1) . ';
         // ]]>
         </script>');
         }
