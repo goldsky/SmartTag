@@ -3,7 +3,7 @@
 /**
  * SmartTag
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2015 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of SmartTag, a MODX's custom Template Variable for tagging
  *
@@ -25,7 +25,7 @@
 class SmartTagCmpHomeManagerController extends SmartTagManagerController {
 
     public function process(array $scriptProperties = array()) {
-        
+
     }
 
     public function getPageTitle() {

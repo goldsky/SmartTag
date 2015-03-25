@@ -3,7 +3,7 @@
 /**
  * SmartTag
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2015 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of SmartTag, a MODX's custom Template Variable for tagging
  *
@@ -36,9 +36,9 @@ abstract class SmartTagManagerController extends modExtraManagerController {
 
         $isCssCompressed = $this->modx->getOption('compress_css');
         $withVersion = $isCssCompressed ? '' : '?v=' . $version;
-        
+
         $this->addCss($this->smarttag->config['cssUrl'] . 'mgr.css' . $withVersion);
-        
+
         $isJsCompressed = $this->modx->getOption('compress_js');
         $withVersion = $isJsCompressed ? '' : '?v=' . $version;
 

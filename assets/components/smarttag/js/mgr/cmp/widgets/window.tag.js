@@ -1,4 +1,4 @@
-SmartTag.window.Tag = function(config) {
+SmartTag.window.Tag = function (config) {
     config = config || {};
 
     Ext.applyIf(config, {
@@ -15,7 +15,7 @@ SmartTag.window.Tag = function(config) {
                 xtype: 'textfield',
                 fieldLabel: _('smarttag.tag') + ':',
                 name: 'tag',
-                allowBlank:  false,
+                allowBlank: false,
                 anchor: '100%',
                 value: config.record &&
                         config.record.tag ? config.record.tag : ''
