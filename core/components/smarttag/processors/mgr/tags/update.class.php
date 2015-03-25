@@ -40,11 +40,11 @@ class TagsUpdateProcessor extends modObjectUpdateProcessor {
             return FALSE;
         }
         $exists = $this->modx->getObject($this->classKey, array('tag:LIKE' => $tag));
-        if ($exists) {
+        if ($exists && $exists->get('id') != $this->getProperty('id')) {
             $this->merged = $this->modx->getObject($this->classKey, $this->getProperty('id'));
             $this->setProperty('id', $exists->get('id'));
         }
-        
+
         return parent::initialize();
     }
 

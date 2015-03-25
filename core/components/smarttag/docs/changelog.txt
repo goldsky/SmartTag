@@ -1,3 +1,8 @@
+SmartTag dev
+==============================================
+- [#23] fix renaming a tag with a LIKE (capital ignored) name which deletes it from the database
+- [#21] Changing name of tag makes it not show up in the TV field
+
 SmartTag 1.0.1-pl (December 24, 2014)
 ==============================================
 - [#21] Changing name of tag makes it not show up in the TV field
