@@ -1,4 +1,4 @@
-SmartTag dev
+SmartTag 1.0.2-pl (March 25, 2014)
 ==============================================
 - [#24][#22] add option to ignore character's filter
 - [#23] fix renaming a tag with a LIKE (capital ignored) name which deletes it from the database
