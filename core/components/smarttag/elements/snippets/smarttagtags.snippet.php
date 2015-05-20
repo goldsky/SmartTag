@@ -58,11 +58,10 @@ $c->select(array(
     'smarttagTags.*',
     'count' => "(" .
     "SELECT COUNT(*) FROM {$modx->getTableName('smarttagTagresources')} AS smarttagTagresources " .
-    (!empty($docIds) || !empty($parentIds) ? "LEFT JOIN {$modx->getTableName('modResource')} as modResource ON modResource.id = smarttagTagresources.resource_id " : '' ) .
-    "WHERE (smarttagTagresources.tag_id = smarttagTags.id " .
+    "LEFT JOIN {$modx->getTableName('modResource')} as modResource ON modResource.id = smarttagTagresources.resource_id " .
+    "WHERE (smarttagTagresources.tag_id = smarttagTags.id AND modResource.published = 1 AND modResource.deleted <> 1 " .
     (!empty($docIds) ? "AND smarttagTagresources.resource_id IN (" . @implode(',', $docIds) . ") " : '') .
     (!empty($parentIds) ? "AND modResource.parent IN (" . @implode(',', $parentIds) . ") " : '') .
-    (!empty($parentIds) || !empty($parentIds) ? "AND modResource.published = 1 AND modResource.deleted != 1 " : '') .
     (empty($includeHiddenDocs) ? "AND modResource.hidemenu != 1 " : '') .
     ")) ",
 ));

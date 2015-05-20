@@ -1,3 +1,7 @@
+SmartTag 1.0.3-pl (May 20, 2015)
+==============================================
+- fix smarttagTags's counter
+
 SmartTag 1.0.2-pl (March 25, 2015)
 ==============================================
 - [#24][#22] add option to ignore character's filter
