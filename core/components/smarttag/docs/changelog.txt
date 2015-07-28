@@ -1,3 +1,7 @@
+SmartTag 1.0.4-dev
+==============================================
+- [#29] added globaltags option to get value from all tags
+
 SmartTag 1.0.3-pl (May 20, 2015)
 ==============================================
 - fix smarttagTags's counter

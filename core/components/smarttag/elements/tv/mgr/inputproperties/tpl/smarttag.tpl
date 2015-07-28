@@ -3,6 +3,7 @@
 
 <script type="text/javascript">
 // <![CDATA[
+{/literal}{$smartlang}{literal}
 var params = {
 {/literal}{foreach from=$params key=k item=v name='p'}
  '{$k}': '{$v|escape:"javascript"}'{if NOT $smarty.foreach.p.last},{/if}
@@ -57,7 +58,7 @@ MODx.load({
     },{
         xtype: MODx.expandHelp ? 'label' : 'hidden'
         ,forId: 'inopt_queryLimit{/literal}{$tv}{literal}'
-        ,html: _('smarttag.queryLimit_desc')
+        ,html: _('smarttag.query_limit_desc')
         ,cls: 'desc-under'
     },{
         xtype: 'textfield'
@@ -66,7 +67,7 @@ MODx.load({
         ,name: 'inopt_title'
         ,id: 'inopt_title{/literal}{$tv}{literal}'
         ,value: params['title'] || ''
-        ,anchor: '100%'
+        ,anchor: '98%'
         ,listeners: oc
     },{
         xtype: MODx.expandHelp ? 'label' : 'hidden'
@@ -109,7 +110,7 @@ MODx.load({
         ,name: 'inopt_listEmptyText'
         ,id: 'inopt_listEmptyText{/literal}{$tv}{literal}'
         ,value: params['listEmptyText'] || ''
-        ,anchor: '100%'
+        ,anchor: '98%'
         ,listeners: oc
     },{
         xtype: MODx.expandHelp ? 'label' : 'hidden'
@@ -145,6 +146,21 @@ MODx.load({
         xtype: MODx.expandHelp ? 'label' : 'hidden'
         ,forId: 'inopt_stackItems{/literal}{$tv}{literal}'
         ,html: _('smarttag.combo_singlemode_desc')
+        ,cls: 'desc-under'
+    },{
+        xtype: 'combo-boolean'
+        ,fieldLabel: _('smarttag.combo_globaltags') || 'globalTags'
+        ,description: MODx.expandHelp ? '' : _('smarttag.combo_globaltags_desc')
+        ,name: 'inopt_globaltags'
+        ,hiddenName: 'inopt_globaltags'
+        ,id: 'inopt_globaltags{/literal}{$tv}{literal}'
+        ,value: params['globaltags'] || false
+        ,width: 200
+        ,listeners: oc
+    },{
+        xtype: MODx.expandHelp ? 'label' : 'hidden'
+        ,forId: 'inopt_globaltags{/literal}{$tv}{literal}'
+        ,html: _('smarttag.combo_globaltags_desc')
         ,cls: 'desc-under'
     }]
     ,renderTo: 'tv-input-properties-form{/literal}{$tv}{literal}'

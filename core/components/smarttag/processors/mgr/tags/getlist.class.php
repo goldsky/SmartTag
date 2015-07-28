@@ -38,7 +38,7 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
      */
     public function prepareQueryBeforeCount(xPDOQuery $c) {
         $props = $this->getProperties();
-        
+
         $c->distinct();
         // from combobox
         if (isset($props['valuesqry'])) {
@@ -73,7 +73,7 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
                 ));
             }
         }
-        
+
         $tvId = isset($props['tvId']) && is_numeric($props['tvId']) ? intval($props['tvId']) : '';
         // for tagcloud
         if (strtolower($props['sort']) === 'count') {
@@ -88,13 +88,20 @@ class TagsGetListProcessor extends modObjectGetListProcessor {
             $c->sortby('count', 'desc');
             $c->sortby('tag', 'asc');
         }
-        
+
         if (!empty($tvId)) {
-            $c->leftJoin('smarttagTagresources', 'Tagresources', 'Tagresources.tag_id = smarttagTags.id');
-            $c->where(array(
-                'Tagresources.tmplvar_id' => $props['tvId']
-            ));
+            $tv = $this->modx->getObject('modTemplateVar', $tvId);
+            if ($tv) {
+                $params = $tv->get('input_properties');
+                if ($params['globaltags'] != 'true') {
+                    $c->leftJoin('smarttagTagresources', 'Tagresources', 'Tagresources.tag_id = smarttagTags.id');
+                    $c->where(array(
+                        'Tagresources.tmplvar_id' => $tvId
+                    ));
+                }
+            }
         }
+
         return $c;
     }
 
