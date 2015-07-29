@@ -1,4 +1,4 @@
-SmartTag 1.0.4-dev
+SmartTag 1.0.4-pl (July 29, 2015)
 ==============================================
 - fix top bar's layout
 - fix empty tagcloud on search+enter
