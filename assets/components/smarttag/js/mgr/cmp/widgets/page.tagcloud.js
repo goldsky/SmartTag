@@ -28,6 +28,7 @@ SmartTag.page.TagCloud = function (config) {
                             {
                                 layout: 'column',
                                 bodyStyle: 'padding: 15px 15px 0 15px;',
+                                border: false,
                                 items: [
                                     {
                                         xtype: 'displayfield',
