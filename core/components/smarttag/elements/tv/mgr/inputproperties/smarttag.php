@@ -22,5 +22,17 @@
  * @package smarttag
  * @subpackage tv
  */
+$modx->lexicon->load('smarttag:prop');
+$lang = $modx->lexicon->fetch('smarttag.', false);
+$toJs = array();
+
+function esc($s) {
+    return strtr($s, array('\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/'));
+}
+
+foreach ($lang as $k => $v) {
+    $toJs[] = 'MODx.lang["' . $k . '"]="' . esc($v) . '";';
+}
+$modx->smarty->assign('smartlang', (!empty($toJs) ? @implode("\n", $toJs) : ''));
 
 return $modx->controller->fetchTemplate($modx->getOption('core_path') . 'components/smarttag/elements/tv/mgr/inputproperties/tpl/smarttag.tpl');

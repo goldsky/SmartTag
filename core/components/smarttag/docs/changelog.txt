@@ -1,3 +1,10 @@
+SmartTag 1.0.4-pl (July 29, 2015)
+==============================================
+- fix top bar's layout
+- fix empty tagcloud on search+enter
+- [#30] fix overflow layout of container's element of the tagcloud
+- [#29] added globaltags option to get value from all tags
+
 SmartTag 1.0.3-pl (May 20, 2015)
 ==============================================
 - fix smarttagTags's counter

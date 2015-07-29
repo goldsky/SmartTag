@@ -65,3 +65,4 @@ $_lang['smarttag.fail'] = 'Fail';
 $_lang['smarttag.read_file_err'] = 'File read error';
 $_lang['smarttag.error'] = 'Error';
 $_lang['smarttag.file_err_ns'] = 'File is not specified!';
+$_lang['smarttag.tvname'] = 'TV\'s name';

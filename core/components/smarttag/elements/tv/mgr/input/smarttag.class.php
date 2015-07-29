@@ -72,7 +72,7 @@ if (!class_exists('SmartTagInputRender')) {
          * @return array
          */
         public function getLexiconTopics() {
-            return array('tv_widget', 'smarttag:default');
+            return array('tv_widget', 'smarttag:prop');
         }
 
     }

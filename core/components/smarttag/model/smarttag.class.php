@@ -24,7 +24,7 @@
  */
 class SmartTag {
 
-    const VERSION = '1.0.3';
+    const VERSION = '1.0.4';
     const RELEASE = 'pl';
 
     /**
