@@ -1,4 +1,4 @@
-SmartTag.page.TagCloud = function(config) {
+SmartTag.page.TagCloud = function (config) {
     config = config || {};
 
     Ext.applyIf(config, {
@@ -26,28 +26,26 @@ SmartTag.page.TagCloud = function(config) {
                         },
                         items: [
                             {
-                                html: '<p>' + _('smarttag.tagcloud_desc') + '</p>',
-                                bodyCssClass: 'panel-desc',
-                                border: false,
-                                tbar: [
+                                layout: 'column',
+                                bodyStyle: 'padding: 15px 15px 0 15px;',
+                                items: [
                                     {
-                                        html: _('search') + ' : ',
-                                        border: false,
-                                        xtype: 'panel',
-                                        padding: 10
+                                        xtype: 'displayfield',
+                                        value: _('search') + ':',
+                                        margins: '6px 0 0 0'
                                     }, {
                                         xtype: 'textfield',
                                         name: 'smarttag-tagcloud-search',
                                         id: 'smarttag-tagcloud-search',
-                                        fieldLabel: _('search'),
                                         width: 100,
                                         listeners: {
                                             'render': {
-                                                fn: function(cmp) {
+                                                fn: function (cmp) {
                                                     var _this = this;
                                                     new Ext.KeyMap(cmp.getEl(), {
                                                         key: Ext.EventObject.ENTER,
-                                                        fn: function() {
+                                                        fn: function () {
+                                                            _this.loadMore = false;
                                                             _this.loadCloud();
                                                             this.blur();
                                                             return true;
@@ -59,39 +57,36 @@ SmartTag.page.TagCloud = function(config) {
                                             }
                                         }
                                     }, {
-                                        html: _('smarttag.limit') + ' : ',
-                                        border: false,
-                                        xtype: 'panel',
-                                        padding: 10
-                                    }, {
-                                        xtype: 'numberfield',
-                                        fieldLabel: _('smarttag.limit'),
-                                        name: 'smarttag-tagcloud-limit',
-                                        id: 'smarttag-tagcloud-limit',
-                                        width: 100,
-                                        value: SmartTag.config.limit
-                                    }, {
-                                        html: _('name') + ' : ',
-                                        border: false,
-                                        xtype: 'panel',
-                                        padding: 10
+                                        xtype: 'displayfield',
+                                        value: _('smarttag.tvname') + ':',
+                                        margins: '6px 0 0 0'
                                     }, {
                                         name: 'smarttag-tagcloud-tvid',
                                         id: 'smarttag-tagcloud-tvid',
-                                        fieldLabel: _('name'),
                                         xtype: 'smarttag-combo-tvs',
                                         onlySmartTag: true,
                                         addBlank: true,
                                         listeners: {
-                                            select: function(comp, record, index) {
+                                            select: function (comp, record, index) {
                                                 if (comp.getValue() == "" || comp.getValue() == "&nbsp;")
                                                     comp.setValue(null);
                                             }
                                         }
                                     }, {
+                                        xtype: 'displayfield',
+                                        value: _('smarttag.limit') + ':',
+                                        margins: '6px 0 0 0'
+                                    }, {
+                                        xtype: 'numberfield',
+                                        name: 'smarttag-tagcloud-limit',
+                                        id: 'smarttag-tagcloud-limit',
+                                        width: 50,
+                                        value: SmartTag.config.limit
+                                    }, {
                                         xtype: 'button',
                                         text: _('smarttag.go!'),
-                                        handler: function() {
+                                        margins: '-10px 0 0 0',
+                                        handler: function () {
                                             this.start = 0;
                                             this.loadMore = false;
                                             this.countBtns = 0;
@@ -99,8 +94,7 @@ SmartTag.page.TagCloud = function(config) {
                                             this.loadCloud();
                                         },
                                         scope: this
-                                    }, '->', {
-                                        xtype: 'panel',
+                                    }, {
                                         id: 'smarttag-tagcloud-total-count',
                                         html: '0/0',
                                         border: false,
@@ -108,9 +102,13 @@ SmartTag.page.TagCloud = function(config) {
                                     }
                                 ]
                             }, {
+                                html: '<p>' + _('smarttag.tagcloud_desc') + '</p>',
+                                bodyCssClass: 'panel-desc',
+                                border: false
+                            }, {
                                 id: 'smarttag-panel-tagcloud',
                                 border: false,
-                                bodyStyle: 'padding: 5px; background-color: transparent; min-height: 300px;',
+                                bodyStyle: 'padding: 5px; background-color: transparent; min-height: 300px; overflow: hidden;',
                                 defaults: {
                                     margins: '0 5 0 0',
                                     pressed: false,
@@ -120,7 +118,7 @@ SmartTag.page.TagCloud = function(config) {
                                 items: [],
                                 listeners: {
                                     afterrender: {
-                                        fn: function(cmp) {
+                                        fn: function (cmp) {
                                             this.loadCloud();
                                         },
                                         scope: this
@@ -140,7 +138,7 @@ SmartTag.page.TagCloud = function(config) {
                                         id: 'smarttag-panel-tagcloud-loadmore-button',
                                         text: 'Load More',
                                         disabled: true,
-                                        handler: function() {
+                                        handler: function () {
                                             var limit = Ext.getCmp('smarttag-tagcloud-limit').getValue();
                                             limit = limit ? limit - 0 : 50;
                                             this.start = this.start + limit;
@@ -158,7 +156,7 @@ SmartTag.page.TagCloud = function(config) {
         ],
         listeners: {
             beforerender: {
-                fn: function(panel) {
+                fn: function (panel) {
                     var homeCenter = Ext.getCmp('smarttag-panel-home-center');
                     panel.height = homeCenter.lastSize.height;
                 },
@@ -170,7 +168,7 @@ SmartTag.page.TagCloud = function(config) {
     SmartTag.page.TagCloud.superclass.constructor.call(this, config);
 };
 Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
-    loadCloud: function() {
+    loadCloud: function () {
         var limit = Ext.getCmp('smarttag-tagcloud-limit').getValue();
         limit = limit ? limit - 0 : 50;
         var search = Ext.getCmp('smarttag-tagcloud-search').getValue();
@@ -179,7 +177,7 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
 
         var _this = this;
         var cmp = Ext.getCmp('smarttag-panel-tagcloud');
-        if (!this.loadMore) {
+        if (this.loadMore === false) {
             cmp.removeAll();
         }
         _this.loadMask();
@@ -198,15 +196,15 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
             },
             listeners: {
                 'success': {
-                    fn: function(response) {
+                    fn: function (response) {
                         if (response.success && response.total > 0) {
-                            Ext.each(response.results, function(item, idx) {
+                            Ext.each(response.results, function (item, idx) {
                                 cmp.add({
                                     xtype: 'button',
                                     id: 'smarttag-tagcloud-btn-' + item.id,
                                     text: item.tag + ' | ' + item.count,
                                     cls: 'smarttag-tag-btn',
-                                    handler: function(btn, e) {
+                                    handler: function (btn, e) {
                                         _this.openTagTab(item, tvId);
                                     }
                                 });
@@ -233,7 +231,7 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
             }
         });
     },
-    loadMask: function() {
+    loadMask: function () {
         if (!this.loadCloudMask) {
             var domHandler = Ext.getCmp('smarttag-panel-tagcloud').body.dom;
             this.loadCloudMask = new Ext.LoadMask(domHandler, {
@@ -242,10 +240,10 @@ Ext.extend(SmartTag.page.TagCloud, MODx.Panel, {
         }
         this.loadCloudMask.show();
     },
-    hideMask: function() {
+    hideMask: function () {
         this.loadCloudMask.hide();
     },
-    openTagTab: function(item, tvId) {
+    openTagTab: function (item, tvId) {
         var tabsWrapper = Ext.getCmp('smarttag-panel-tagcloud-tabs');
         var check = Ext.getCmp('smarttag-panel-tagcloud-tab-' + item.id);
         if (!check) {
