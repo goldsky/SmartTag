@@ -1,3 +1,8 @@
+SmartTag 1.0.5-pl (September 10, 2015)
+==============================================
+- [#33] refactor tags counter
+- [#32] added Russian translation lexicon files, thanks to https://github.com/ExcaliburKG
+
 SmartTag 1.0.4-pl (July 29, 2015)
 ==============================================
 - fix top bar's layout

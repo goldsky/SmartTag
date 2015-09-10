@@ -40,6 +40,9 @@ if (empty($docIds) && empty($parentIds) && empty($allTags)) {
 
 $includeEmptyTags = intval($modx->getOption('includeEmptyTags', $scriptProperties));
 $tvNames = $modx->getOption('tvNames', $scriptProperties);
+if (!empty($tvNames)) {
+    $tvNames = array_map('trim', @explode(',', $tvNames));
+}
 $limit = intval($modx->getOption('limit', $scriptProperties, 10));
 $sort = $modx->getOption('sort', $scriptProperties, 'count desc,tag asc');
 $tplWrapper = $modx->getOption('tplWrapper', $scriptProperties, 'smarttagtags.wrapper');
@@ -53,48 +56,73 @@ if (!($smartTag instanceof SmartTag)) {
 }
 
 $c = $modx->newQuery('smarttagTags');
-$c->distinct();
 $c->select(array(
     'smarttagTags.*',
-    'count' => "(" .
-    "SELECT COUNT(*) FROM {$modx->getTableName('smarttagTagresources')} AS smarttagTagresources " .
-    "LEFT JOIN {$modx->getTableName('modResource')} as modResource ON modResource.id = smarttagTagresources.resource_id " .
-    "WHERE (smarttagTagresources.tag_id = smarttagTags.id AND modResource.published = 1 AND modResource.deleted <> 1 " .
-    (!empty($docIds) ? "AND smarttagTagresources.resource_id IN (" . @implode(',', $docIds) . ") " : '') .
-    (!empty($parentIds) ? "AND modResource.parent IN (" . @implode(',', $parentIds) . ") " : '') .
-    (empty($includeHiddenDocs) ? "AND modResource.hidemenu != 1 " : '') .
-    ")) ",
 ));
-if (!empty($docIds) || !empty($parentIds)) {
-    $c->leftJoin('smarttagTagresources', 'Tagresources', 'Tagresources.tag_id=smarttagTags.id');
-    $c->leftJoin('modResource', 'Resource', 'Tagresources.resource_id=Resource.id');
-    $c->where(array(
-        'Resource.published:=' => 1,
-        'Resource.deleted:!=' => 1,
-    ));
-    if (empty($includeHiddenDocs)) {
-        $c->where(array(
-            'Resource.hidemenu:!=' => 1,
-        ));
-    }
-    if (!empty($tvNames)) {
-        $tvNames = @explode(',', $tvNames);
-        $c->leftJoin('modTemplateVar', 'TemplateVar', 'TemplateVar.id=Tagresources.tmplvar_id');
-        $c->where(array(
-            'TemplateVar.name:IN' => $tvNames,
-        ));
-    }
-}
+$c->distinct();
+$c->leftJoin('smarttagTagresources', 'Tagresources', 'Tagresources.tag_id = smarttagTags.id');
+$c->leftJoin('modResource', 'Resource', 'Resource.id = Tagresources.resource_id');
+$c->where(array(
+    'Resource.published:=' => 1,
+    'Resource.deleted:!=' => 1,
+));
+
+/**
+ * start criteria for 'count' alias
+ */
+$countCriteria = $modx->newQuery('smarttagTagresources');
+$countCriteria->select('COUNT(*)');
+$countCriteria->where(array(
+    'smarttagTagresources.tag_id = smarttagTags.id',
+));
+
+$countCriteria->leftJoin('modResource', 'modResource', 'modResource.id = smarttagTagresources.resource_id');
+$countCriteria->where(array(
+    'modResource.published:=' => 1,
+    'modResource.deleted:!=' => 1,
+));
 if (!empty($docIds)) {
     $c->where(array(
         'Tagresources.resource_id:IN' => $docIds
+    ));
+    $countCriteria->where(array(
+        'smarttagTagresources.resource_id:IN' => $docIds,
     ));
 }
 if (!empty($parentIds)) {
     $c->where(array(
         'Resource.parent:IN' => $parentIds
     ));
+    $countCriteria->where(array(
+        'modResource.parent:IN' => $parentIds,
+    ));
 }
+if (empty($includeHiddenDocs)) {
+    $c->where(array(
+        'Resource.hidemenu:!=' => 1,
+    ));
+    $countCriteria->where(array(
+        'modResource.hidemenu:!=' => 1
+    ));
+}
+if (!empty($tvNames)) {
+    $c->leftJoin('modTemplateVar', 'TemplateVar', 'TemplateVar.id = Tagresources.tmplvar_id');
+    $c->where(array(
+        'TemplateVar.name:IN' => $tvNames,
+    ));
+    $countCriteria->leftJoin('modTemplateVar', 'modTemplateVar', 'modTemplateVar.id = smarttagTagresources.tmplvar_id');
+    $countCriteria->where(array(
+        'modTemplateVar.name:IN' => $tvNames,
+    ));
+}
+
+$countCriteria->prepare();
+$countCriteriaSql = $countCriteria->toSQL();
+
+$c->select(array(
+    'count' => '(' . $countCriteriaSql . ')',
+));
+
 $sorts = @explode(',', $sort);
 foreach ($sorts as $v) {
     $sorter = @explode(' ', strtolower($v));
@@ -102,6 +130,7 @@ foreach ($sorts as $v) {
     $sortDir = isset($sorter[1]) && in_array($sorter[1], array('asc', 'desc')) ? $sorter[1] : 'desc';
     $c->sortby($sortBy, $sortDir);
 }
+
 if (empty($includeEmptyTags)) {
     $c->having('count > 0');
 }
@@ -147,4 +176,5 @@ if (!empty($toPlaceholder)) {
     $modx->setPlaceholder($toPlaceholder, $output);
     return;
 }
+
 return $output;
