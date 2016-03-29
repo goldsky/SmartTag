@@ -9,7 +9,7 @@ Ext.onReady(function() {
         ,root:'results'
         ,baseParams: {
             action: 'mgr/tags/getlist'
-            ,tvId: {/literal}{$tv->id}{literal}
+            ,tvId: '{/literal}{$tv->id}{literal}'
             ,sort: 'tag'
             ,dir: 'ASC'
             ,limit: {/literal}{if $params.queryLimit}{$params.queryLimit}{else}20{/if}{literal}
